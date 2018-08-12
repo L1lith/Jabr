@@ -29,6 +29,7 @@ function dataProxy(jabr, parent, pathChain = []) {
     },
     set: (target, prop, value) => {
       jabr.set(...pathChain, prop, value)
+      return true
     },
     has: (target, prop) => {
       return jabr.has(...pathChain, prop)
