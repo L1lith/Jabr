@@ -72,6 +72,15 @@ class Jabr {
   }
   delete() {
     const path = pathArguments(arguments, 0)
+    let target = this.store
+    path.forEach((pathArg, index) => {
+      if (index < path.length - 1) {
+        target = target[pathArg]
+        if (typeof target != 'object' || target === null) throw new Error("Target is not an object")
+      }
+    })
+    delete target[path[path.length - 1]]
+    this.getListeners(path).forEach(listener => listener(undefined, path))
   }
 }
 
