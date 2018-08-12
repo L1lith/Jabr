@@ -1,8 +1,8 @@
 const Jabr = require('./Jabr')
 const JabrResult = require('./JabrResult')
 
-function createJabrProxy() {
-  const jabr = new Jabr()
+function createJabrProxy(initialStore) {
+  const jabr = new Jabr(initialStore)
   return dataProxy(jabr, jabr.store)
 }
 
