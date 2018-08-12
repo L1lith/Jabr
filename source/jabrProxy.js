@@ -1,4 +1,5 @@
 const Jabr = require('./Jabr')
+const JabrResult = require('./JabrResult')
 
 function createJabrProxy() {
   const jabr = new Jabr()
@@ -44,7 +45,7 @@ function dataProxy(jabr, parent, pathChain = []) {
     isExtensible: $return(true),
     setPrototypeOf: $return(false),
     defineProperty: $return(false),
-    getPrototypeOf: $return(Jabr)
+    getPrototypeOf: ()=>pathChain.length === 0 ? Jabr.prototype : JabrResult.prototype
   })
 }
 
