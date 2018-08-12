@@ -2,8 +2,10 @@ const autoBind = require('auto-bind')
 const pathArguments = require('./functions/pathArguments')
 
 class Jabr {
-  constructor() {
-    this.store = {}
+  constructor(initialStore={}) {
+    if (typeof initialStore != 'object' || initialStore === null) throw new Error("The initial store must be an object")
+    if (Object.isFrozen(initialStore)) throw new Error('The initial store cannot be frozen')
+    this.store = initialStore
     this.listeners = {}
     autoBind(this)
   }
@@ -11,6 +13,14 @@ class Jabr {
     if (arguments.length < 2) throw new Error('Missing Value Argument')
     const path = pathArguments(arguments)
     let target = this.store
+    path.forEach((pathArg, index) => {
+      if (index < path.length - 1) {
+        if (!target.hasOwnProperty(pathArg)) {
+          target[pathArg] = {}
+        } else if (typeof target[pathArg] != 'object' || target[pathArg] === null) throw new Error(`Path "${pathArg}" Not an Object`)
+        target = target[pathArg]
+      }
+    })
 
     const value = arguments[arguments.length - 1]
     target[path[path.length - 1]] = value
@@ -43,4 +53,26 @@ class Jabr {
     if (!target.hasOwnProperty('listeners')) target.listeners = []
     return target.listeners
   }
+  get() {
+    const path = pathArguments(arguments, 0)
+    let target = this.store
+    path.forEach(pathArg => {
+      target = target[pathArg]
+    })
+    return target
+  }
+  keys() {
+    const path = pathArguments(arguments, 0, 0)
+    let target = this.store
+    path.forEach(pathArg => {
+      target = target[pathArg]
+      if (typeof target != 'object' || target === null) throw new Error("Target is not an object")
+    })
+    return Reflect.ownKeys(target)
+  }
+  delete() {
+    const path = pathArguments(arguments, 0)
+  }
 }
+
+module.exports = Jabr
