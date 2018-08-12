@@ -10,11 +10,17 @@
     "type": "git",
     "url": "git+https://github.com/L1lith/Jabr.git"
   },
-  "keywords": ["state", "react"],
+  "keywords": [
+    "state",
+    "react"
+  ],
   "author": "L1lith",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/L1lith/Jabr/issues"
   },
-  "homepage": "https://github.com/L1lith/Jabr#readme"
+  "homepage": "https://github.com/L1lith/Jabr#readme",
+  "dependencies": {
+    "auto-bind": "^1.2.1"
+  }
 }
