@@ -11,8 +11,7 @@ const eventRedirects = {
   removeListener: 'removeListener'
 }
 
-const returnFalse = ()=>false
-const returnTrue = ()=>true
+const $return = input=>(()=>input)
 
 function dataProxy(jabr, parent, pathChain = []) {
   return new Proxy(parent, {
@@ -42,10 +41,10 @@ function dataProxy(jabr, parent, pathChain = []) {
     construct: ()=>{
       return createJabrProxy
     },
-    isExtensible: returnTrue,
-    setPrototypeOf: returnFalse,
-    defineProperty: returnFalse,
-    getPrototypeOf: ()=>Jabr
+    isExtensible: $return(true),
+    setPrototypeOf: $return(false),
+    defineProperty: $return(false),
+    getPrototypeOf: $return(Jabr)
   })
 }
 
