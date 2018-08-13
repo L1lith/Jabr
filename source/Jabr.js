@@ -24,7 +24,6 @@ class Jabr {
 
     const value = arguments[arguments.length - 1]
     target[path[path.length - 1]] = value
-    console.log(this.getListeners(path))
     this.getListeners(path).forEach(listener => {
       listener(value, path)
     })
@@ -66,7 +65,6 @@ class Jabr {
   }
   getListeners(path) {
     let target = this.listeners
-    console.log(target)
     let listeners = this.listeners.listeners
     path.forEach((pathArg, index) => {
       if (!target.hasOwnProperty('children')) target.children = {}
