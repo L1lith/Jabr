@@ -1,6 +1,6 @@
 {
   "name": "jabr",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "No-nonsense State Management",
   "main": "source/index.js",
   "scripts": {
