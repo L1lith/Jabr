@@ -6,7 +6,7 @@ class Jabr {
     if (typeof initialStore != 'object' || initialStore === null) throw new Error("The initial store must be an object")
     if (Object.isFrozen(initialStore)) throw new Error('The initial store cannot be frozen')
     this.store = initialStore
-    this.listeners = {}
+    this.listeners = {listeners: []}
     autoBind(this)
   }
   set() {
@@ -29,7 +29,7 @@ class Jabr {
     })
   }
   addListener() {
-    const path = pathArguments(arguments)
+    const path = pathArguments(arguments, 1, 0)
     const listener = arguments[arguments.length - 1]
     if (typeof listener != 'function') throw new Error('Change Listener Must be a Function')
     const listeners = this.getListeners(path)
@@ -39,19 +39,34 @@ class Jabr {
     const path = pathArguments(arguments)
     const listener = arguments[arguments.length - 1]
     if (typeof listener != 'function') throw new Error('Change Listener Must be a Function')
-    const listeners = this.getListeners(path)
+
+    let target = this.listeners
+
+    path.forEach((pathArg, index) => {
+      if (!target.hasOwnProperty('children')) target.children = {}
+      if (!target.children.hasOwnProperty(pathArg)) target.children[pathArg] = {}
+      if (!target.hasOwnProperty('listeners')) target.listeners = []
+      target = target.children[pathArg]
+      const {listeners} = target
+      const listenerIndex = listeners.indexOf(listener)
+      if (listenerIndex > -1) listeners.splice(listenerIndex, 1)
+    })
+
+    const {listeners} = this
     const listenerIndex = listeners.indexOf(listener)
     if (listenerIndex > -1) listeners.splice(listenerIndex, 1)
   }
   getListeners(path) {
     let target = this.listeners
+    let listeners = this.listeners.listeners
     path.forEach((pathArg, index) => {
       if (!target.hasOwnProperty('children')) target.children = {}
       if (!target.children.hasOwnProperty(pathArg)) target.children[pathArg] = {}
+      if (!target.hasOwnProperty('listeners')) target.listeners = []
       target = target.children[pathArg]
+      listeners = listeners.concat(target.listeners)
     })
-    if (!target.hasOwnProperty('listeners')) target.listeners = []
-    return target.listeners
+    return listeners
   }
   get() {
     const path = pathArguments(arguments, 0)
