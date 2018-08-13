@@ -24,6 +24,7 @@ class Jabr {
 
     const value = arguments[arguments.length - 1]
     target[path[path.length - 1]] = value
+    console.log(this.getListeners(path))
     this.getListeners(path).forEach(listener => {
       listener(value, path)
     })
@@ -32,8 +33,15 @@ class Jabr {
     const path = pathArguments(arguments, 1, 0)
     const listener = arguments[arguments.length - 1]
     if (typeof listener != 'function') throw new Error('Change Listener Must be a Function')
-    const listeners = this.getListeners(path)
-    if (!listeners.includes(listener)) listeners.push(listener)
+    let target = this.listeners
+
+    path.forEach((pathArg, index) => {
+      if (!target.hasOwnProperty('children')) target.children = {}
+      if (!target.children.hasOwnProperty(pathArg)) target.children[pathArg] = {}
+      target = target.children[pathArg]
+      if (!target.hasOwnProperty('listeners')) target.listeners = []
+    })
+    target.listeners.push(listener)
   }
   removeListener() {
     const path = pathArguments(arguments)
@@ -45,8 +53,8 @@ class Jabr {
     path.forEach((pathArg, index) => {
       if (!target.hasOwnProperty('children')) target.children = {}
       if (!target.children.hasOwnProperty(pathArg)) target.children[pathArg] = {}
-      if (!target.hasOwnProperty('listeners')) target.listeners = []
       target = target.children[pathArg]
+      if (!target.hasOwnProperty('listeners')) target.listeners = []
       const {listeners} = target
       const listenerIndex = listeners.indexOf(listener)
       if (listenerIndex > -1) listeners.splice(listenerIndex, 1)
@@ -58,12 +66,14 @@ class Jabr {
   }
   getListeners(path) {
     let target = this.listeners
+    console.log(target)
     let listeners = this.listeners.listeners
     path.forEach((pathArg, index) => {
       if (!target.hasOwnProperty('children')) target.children = {}
       if (!target.children.hasOwnProperty(pathArg)) target.children[pathArg] = {}
-      if (!target.hasOwnProperty('listeners')) target.listeners = []
       target = target.children[pathArg]
+      if (!target.hasOwnProperty('listeners')) target.listeners = []
+
       listeners = listeners.concat(target.listeners)
     })
     return listeners
