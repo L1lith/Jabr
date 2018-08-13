@@ -20,6 +20,7 @@ function dataProxy(jabr, parent, pathChain = []) {
       if (eventRedirects.hasOwnProperty(prop)) {
         return jabr[eventRedirects[prop]].bind(null, ...pathChain)
       }
+      if (!parent.hasOwnProperty(prop)) parent[prop] = {}
       const value = parent[prop]
       if (typeof value == 'object' && value !== null) {
         return dataProxy(jabr, value, pathChain.concat(prop))
