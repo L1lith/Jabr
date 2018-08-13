@@ -93,6 +93,19 @@ class Jabr {
     })
     return Reflect.ownKeys(target)
   }
+  has() {
+    const path = pathArguments(arguments, 1, 0)
+    const prop = arguments[arguments.length - 1]
+    if (typeof prop != 'string') throw new Error('Target prop must be a string')
+    let target = this.store
+    path.forEach((pathArg, index) => {
+      if (index < path.length - 1) {
+        target = target[pathArg]
+        if (typeof target != 'object' || target === null) throw new Error("Target is not an object")
+      }
+    })
+    return target.hasOwnProperty(prop)
+  }
   delete() {
     const path = pathArguments(arguments, 0)
     let target = this.store
