@@ -6,7 +6,9 @@ function createJabrProxy(initialStore) {
   return dataProxy(jabr, jabr.store)
 }
 
-const eventRedirects = {
+const toStringSymbols = ['Symbol(util.inspect.custom)', 'Symbol(Symbol.toStringTag)']
+
+const jabrRedirects = {
   on: 'addListener',
   addListener: 'addListener',
   removeListener: 'removeListener'
@@ -17,9 +19,12 @@ const $return = input=>(()=>input)
 function dataProxy(jabr, parent, pathChain = []) {
   return new Proxy(parent, {
     get: (target, prop) => {
-      if (eventRedirects.hasOwnProperty(prop)) {
-        return jabr[eventRedirects[prop]].bind(null, ...pathChain)
+      if (prop === 'valueof') return target === jabr ? jabr.store : target
+      if (typeof prop === 'symbol' && toStringSymbols.includes(String(prop))) {
+        return target.toString()
       }
+      if (typeof prop != 'string') throw new Error("Expected String Property")
+      if (prop === "_Jabr") return jabr
       const value = jabr.get(...pathChain, prop)
       if (typeof value == 'object' && value !== null) {
         return dataProxy(jabr, value, pathChain.concat(prop))

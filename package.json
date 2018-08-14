@@ -21,6 +21,8 @@
   },
   "homepage": "https://github.com/L1lith/Jabr#readme",
   "dependencies": {
-    "auto-bind": "^1.2.1"
+    "auto-bind": "^1.2.1",
+    "clone": "^2.1.2",
+    "deep-equal": "^1.0.1"
   }
 }
