@@ -19,11 +19,14 @@ const $return = input=>(()=>input)
 function dataProxy(jabr, parent, pathChain = []) {
   return new Proxy(parent, {
     get: (target, prop) => {
-      if (prop === 'valueof') return target === jabr ? jabr.store : target
+      const rawData = target === jabr ? jabr.store : target
+      if (prop === 'toJSON') return ()=>JSON.stringify(rawData)
       if (typeof prop === 'symbol' && toStringSymbols.includes(String(prop))) {
         return target.toString()
       }
       if (typeof prop != 'string') throw new Error("Expected String Property")
+      if (prop === 'valueOf') return ()=>rawData
+      if (jabrRedirects.hasOwnProperty(prop)) return jabr[jabrRedirects[prop]]
       if (prop === "_Jabr") return jabr
       const value = jabr.get(...pathChain, prop)
       if (typeof value == 'object' && value !== null) {

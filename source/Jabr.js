@@ -80,6 +80,7 @@ class Jabr {
     const path = pathArguments(arguments, 0)
     let target = this.store
     path.forEach(pathArg => {
+      //if (!target.hasOwnProperty(pathArg)) target[pathArg] = {}
       target = target[pathArg]
     })
     return target
