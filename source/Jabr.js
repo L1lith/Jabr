@@ -53,13 +53,9 @@ class Jabr {
       if (!target.hasOwnProperty('children')) target.children = {}
       if (!target.children.hasOwnProperty(pathArg)) target.children[pathArg] = {}
       target = target.children[pathArg]
-      if (!target.hasOwnProperty('listeners')) target.listeners = []
-      const {listeners} = target
-      const listenerIndex = listeners.indexOf(listener)
-      if (listenerIndex > -1) listeners.splice(listenerIndex, 1)
     })
-
-    const {listeners} = this
+    if (!target.hasOwnProperty('listeners')) target.listeners = []
+    const {listeners} = target
     const listenerIndex = listeners.indexOf(listener)
     if (listenerIndex > -1) listeners.splice(listenerIndex, 1)
   }
