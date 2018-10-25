@@ -19,7 +19,7 @@ store.on('a', value => {
 })
 store.a = 12 // Logs 12
 ```
-Jabr triggers the callback function without requiring us to call any methods. It does this by using the [Proxy API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) under the hood, but you don't need to worry about that unless your runtime doesn't support it.
+Jabr triggers the callback function without requiring us to call any methods. It does this by using the [Proxy API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) under the hood, but you don't need to worry about that unless your runtime doesn't support it (all modern Javascript Environments do).
 
 ## More
 #### Initializing the Store
