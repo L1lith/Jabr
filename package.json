@@ -2,8 +2,10 @@
   "name": "jabr",
   "version": "0.0.10",
   "description": "No-nonsense State Management",
-  "main": "source/index.js",
+  "main": "dist/Jabr-commonjs.js",
   "scripts": {
+    "build": "rollup -c",
+    "build-prod": "rollup -c --prod",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,7 +22,16 @@
     "url": "https://github.com/L1lith/Jabr/issues"
   },
   "homepage": "https://github.com/L1lith/Jabr#readme",
-  "dependencies": {
-    "auto-bind": "^1.2.1"
+  "devDependencies": {
+    "auto-bind": "^1.2.1",
+    "@babel/core": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "deepmerge": "^4.2.2",
+    "rollup": "^1.27.8",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-require-context": "^1.0.0",
+    "rollup-plugin-uglify": "^6.0.3"
   }
 }
