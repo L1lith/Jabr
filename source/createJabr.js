@@ -39,7 +39,6 @@ function createJabr(initialStore={}) {
     deleteProperty: (target, prop) => {
       if (storeMethods.hasOwnProperty(prop)) throw new Error("Cannot delete that property!")
       delete store[prop]
-      console.log(eventListeners, prop)
       if (eventListeners.hasOwnProperty(prop)) {
         eventListeners[prop].forEach(listener => {
           try {
