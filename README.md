@@ -32,12 +32,8 @@ console.log(store.b) // Logs "Long John Silvers"
 ```
 
 #### Deep Property Listeners
-In order to create listeners for deeply nested properties of the store we just pass additional property names to the store.on function like so
-```js
-store.on('auth','loginStatus', loginStatus => {
-	console.log({loginStatus})
-})
-```
+Deep property listeners have been deprecated. Sorry about that.
+~~In order to create listeners for deeply nested properties of the store we just pass additional property names to the store.on function like so~~
 
 ## React
 Jabr supports React using the `"jabr-react"` package found [here](https://github.com/L1lith/Jabr-React).
