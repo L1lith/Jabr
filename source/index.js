@@ -1,20 +1,20 @@
 import createJabr from './createJabr'
 
 export default new Proxy(createJabr, {
-  set: ()=>{
-    throw new Error("Cannot overwrite the library")
+  set: () => {
+    throw new Error('Cannot overwrite the library')
   },
-  get: ()=>{
+  get: () => {
     return undefined
   },
-  setPrototypeOf: ()=>{
-    throw new Error("Cannot overwrite the library")
+  setPrototypeOf: () => {
+    throw new Error('Cannot overwrite the library')
   },
-  isExtensible: ()=>false,
-  deleteProperty: ()=>{
-    throw new Error("Cannot overwrite the library")
+  isExtensible: () => false,
+  deleteProperty: () => {
+    throw new Error('Cannot overwrite the library')
   },
-  construct: (target, args)=> {
+  construct: (target, args) => {
     return createJabr(...args)
   }
 })

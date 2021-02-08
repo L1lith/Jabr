@@ -1,4 +1,4 @@
-function pathArguments(args, saveIndexes=1, minLength = 1) {
+function pathArguments(args, saveIndexes = 1, minLength = 1) {
   const path = [...args].slice(0, args.length - saveIndexes)
   if (path.length < minLength) throw new Error('Missing Path Argument(s)')
   path.forEach(pathArg => {

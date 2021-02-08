@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rollup -c",
     "build-prod": "rollup -c --prod",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha \"tests/allTests/**/*.js\""
   },
   "repository": {
     "type": "git",
@@ -23,15 +23,20 @@
   },
   "homepage": "https://github.com/L1lith/Jabr#readme",
   "devDependencies": {
-    "auto-bind": "^1.2.1",
     "@babel/core": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
+    "auto-bind": "^1.2.1",
+    "chai": "^4.3.0",
     "deepmerge": "^4.2.2",
+    "mocha": "^8.2.1",
     "rollup": "^1.27.8",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-require-context": "^1.0.0",
     "rollup-plugin-uglify": "^6.0.3"
+  },
+  "dependencies": {
+    "sandhands": "^1.8.3"
   }
 }

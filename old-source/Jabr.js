@@ -2,11 +2,12 @@ const autoBind = require('auto-bind')
 const pathArguments = require('./functions/pathArguments')
 
 class Jabr {
-  constructor(initialStore={}) {
-    if (typeof initialStore != 'object' || initialStore === null) throw new Error("The initial store must be an object")
+  constructor(initialStore = {}) {
+    if (typeof initialStore != 'object' || initialStore === null)
+      throw new Error('The initial store must be an object')
     if (Object.isFrozen(initialStore)) throw new Error('The initial store cannot be frozen')
     this.store = initialStore
-    this.listeners = {listeners: []}
+    this.listeners = { listeners: [] }
     autoBind(this)
   }
   set() {
@@ -17,7 +18,8 @@ class Jabr {
       if (index < path.length - 1) {
         if (!target.hasOwnProperty(pathArg)) {
           target[pathArg] = {}
-        } else if (typeof target[pathArg] != 'object' || target[pathArg] === null) throw new Error(`Path "${pathArg}" Not an Object`)
+        } else if (typeof target[pathArg] != 'object' || target[pathArg] === null)
+          throw new Error(`Path "${pathArg}" Not an Object`)
         target = target[pathArg]
       }
     })
@@ -55,7 +57,7 @@ class Jabr {
       target = target.children[pathArg]
     })
     if (!target.hasOwnProperty('listeners')) target.listeners = []
-    const {listeners} = target
+    const { listeners } = target
     const listenerIndex = listeners.indexOf(listener)
     if (listenerIndex > -1) listeners.splice(listenerIndex, 1)
   }
@@ -86,7 +88,7 @@ class Jabr {
     let target = this.store
     path.forEach(pathArg => {
       target = target[pathArg]
-      if (typeof target != 'object' || target === null) throw new Error("Target is not an object")
+      if (typeof target != 'object' || target === null) throw new Error('Target is not an object')
     })
     return Reflect.ownKeys(target)
   }
@@ -98,7 +100,7 @@ class Jabr {
     path.forEach((pathArg, index) => {
       if (index < path.length - 1) {
         target = target[pathArg]
-        if (typeof target != 'object' || target === null) throw new Error("Target is not an object")
+        if (typeof target != 'object' || target === null) throw new Error('Target is not an object')
       }
     })
     return target.hasOwnProperty(prop)
@@ -109,7 +111,7 @@ class Jabr {
     path.forEach((pathArg, index) => {
       if (index < path.length - 1) {
         target = target[pathArg]
-        if (typeof target != 'object' || target === null) throw new Error("Target is not an object")
+        if (typeof target != 'object' || target === null) throw new Error('Target is not an object')
       }
     })
     delete target[path[path.length - 1]]
