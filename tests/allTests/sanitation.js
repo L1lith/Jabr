@@ -47,4 +47,28 @@ describe('Data Sanitation', () => {
       store.color = 'green'
     }).to.not.throw()
   })
+  it('validates sanitation on computed properties with correct values', () => {
+    const randomPropertyID = makeID()
+    const randomValue = Math.random()
+    const computedProperties = {}
+    computedProperties[randomPropertyID] = () => randomValue
+    const format = {}
+    format[randomPropertyID] = Number
+    const store = new Jabr({}, { computedProperties, format })
+    expect(() => {
+      store[randomPropertyID]
+    }).to.not.throw()
+  })
+  it('enforces sanitation on computed properties with incorrect values', () => {
+    const randomPropertyID = makeID()
+    const randomValue = Math.random()
+    const computedProperties = {}
+    computedProperties[randomPropertyID] = () => randomValue
+    const format = {}
+    format[randomPropertyID] = String
+    const store = new Jabr({}, { computedProperties, format })
+    expect(() => {
+      store[randomPropertyID]
+    }).to.throw()
+  })
 })
