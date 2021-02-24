@@ -1,6 +1,6 @@
 {
   "name": "jabr",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "No-nonsense State Management",
   "main": "dist/Jabr-commonjs.js",
   "scripts": {
@@ -37,6 +37,10 @@
     "rollup-plugin-uglify": "^6.0.3"
   },
   "dependencies": {
+    "mongodb": "^3.6.4",
     "sandhands": "^1.8.3"
+  },
+  "optionalDependencies": {
+    "mongodb": "^3.6.4"
   }
 }

@@ -6,27 +6,28 @@ const reservedProperties = ['on', 'listen', 'addEventListener', 'strict', 'forma
 const storeFormat = Format(Object).nullable().strict(false)
 
 const optionsFormat = Format({
-  computedProperties: Format(Object).nullable().standard(Function),
-  format: Format({ strict: Boolean }).strict(false).nullable()
+  computedProperties: Format(Object).standard(Function),
+  format: Object
 }).allOptional()
 
-function createJabr(initialStore = {}, options = {}) {
+function createJabr(initialStore, options) {
+  initialStore = initialStore || {}
+  options = options || {}
   sanitize(initialStore, storeFormat)
-  const store = Object.assign(new Jabr(), initialStore || {})
   sanitize(options, optionsFormat)
-  if (options === null) {
-    options = {}
-  }
 
   const eventListeners = {}
   const storeMethods = {}
   const computedProperties = options.computedProperties || {}
   const format = options.format || {}
   const strictFormat = format.hasOwnProperty('strict')
-    ? strictFormat
+    ? !!format.strict
     : options.hasOwnProperty('format')
   delete format.strict
 
+  if (options.hasOwnProperty('format')) sanitize(initialStore, format, { strict: strictFormat })
+
+  const store = Object.assign(new Jabr(), initialStore || {})
   storeMethods.addEventListener = storeMethods.on = storeMethods.listen = (prop, callback) => {
     if (typeof prop != 'string') throw new Error('Prop name must be a non-empty string!')
     if (typeof callback != 'function') throw new Error('Callback must be a function')
@@ -36,17 +37,22 @@ function createJabr(initialStore = {}, options = {}) {
     if (!ourEventListeners.includes(callback)) ourEventListeners.push(callback)
   }
 
-  return new Proxy(store, {
+  const storeProxy = new Proxy(store, {
     get: (target, prop) => {
       if (strictFormat && !format.hasOwnProperty(prop))
         throw new Error('Cannot access that property!')
-      if (computedProperties.hasOwnProperty(prop)) {
-        const output = computedProperties[prop].apply(store)
-        if (format.hasOwnProperty(prop)) sanitize(output, format[prop]) // Sanitize Computed Values
-        return output
+      let output = undefined
+      if (store.hasOwnProperty(prop)) {
+        output = store[prop]
+      } else if (computedProperties.hasOwnProperty(prop)) {
+        output = computedProperties[prop].apply(storeProxy)
+      } else if (storeMethods.hasOwnProperty(prop)) {
+        return storeMethods[prop] // Return the method without sanitizing
       }
-      if (storeMethods.hasOwnProperty(prop)) return storeMethods[prop]
-      return store[prop]
+      if (format.hasOwnProperty(prop)) {
+        sanitize(output, format[prop]) // Sanitize Output Values
+      }
+      return output
     },
     set: (target, prop, value) => {
       if (
@@ -90,9 +96,12 @@ function createJabr(initialStore = {}, options = {}) {
       return prop in storeMethods || prop in store
     },
     ownKeys: () => {
-      return Reflect.ownKeys(store).concat(Reflect.ownKeys(storeMethods))
+      return Reflect.ownKeys(store)
+        .concat(Reflect.ownKeys(storeMethods))
+        .concat(Object.keys(computedProperties))
     }
   })
+  return storeProxy
 }
 
 export default createJabr
