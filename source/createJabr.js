@@ -66,6 +66,8 @@ function createJabr(initialStore, options) {
       } else if (strictFormat) {
         throw new Error(`Property "${prop}" is not allowed`)
       }
+      if (store.hasOwnProperty(prop) && store[prop] === value)
+        return console.warn('Redundant value set, not triggering update.')
       store[prop] = value
       if (eventListeners.hasOwnProperty(prop)) {
         eventListeners[prop].forEach(listener => {
