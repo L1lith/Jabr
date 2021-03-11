@@ -47,7 +47,5 @@
     "sandhands": "^1.8.3",
     "tiny-emitter": "^2.1.0"
   },
-  "optionalDependencies": {
-    "mongodb": "^3.6.4"
-  }
+  "optionalDependencies": {}
 }
