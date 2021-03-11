@@ -1,106 +1,64 @@
 import Jabr from './Jabr'
 import { sanitize, Format } from 'sandhands'
+import onlyUnique from './functions/onlyUnique'
+import parseJabrOptions from './functions/parseJabrOptions'
+import PropertyMapper from './functions/PropertyMapper'
+import deepEqual from 'deep-equal'
 
 const reservedProperties = ['on', 'listen', 'addEventListener', 'strict', 'format']
 
-const storeFormat = Format(Object).nullable().strict(false)
-
-const optionsFormat = Format({
-  computedProperties: Format(Object).standard(Function),
-  format: Object
-}).allOptional()
-
-function createJabr(initialStore, options) {
-  initialStore = initialStore || {}
-  options = options || {}
-  sanitize(initialStore, storeFormat)
-  sanitize(options, optionsFormat)
+function createJabr(...args) {
+  const jabrOptions = parseJabrOptions(...args)
+  const { options } = jabrOptions
+  const propertyMapper = new PropertyMapper(jabrOptions)
 
   const eventListeners = {}
   const storeMethods = {}
-  const computedProperties = options.computedProperties || {}
-  const format = options.format || {}
-  const strictFormat = format.hasOwnProperty('strict')
-    ? !!format.strict
-    : options.hasOwnProperty('format')
-  delete format.strict
+  const store = new Jabr()
 
-  if (options.hasOwnProperty('format')) sanitize(initialStore, format, { strict: strictFormat })
-
-  const store = Object.assign(new Jabr(), initialStore || {})
-  storeMethods.addEventListener = storeMethods.on = storeMethods.listen = (prop, callback) => {
+  // Disabled, please return back later //if (options.hasOwnProperty('storeFormat')) sanitize(initialStore, options.storeFormat)
+  storeMethods.addEventListener = storeMethods.on = storeMethods.listen = (
+    prop,
+    callback,
+    event = 'change'
+  ) => {
     if (typeof prop != 'string') throw new Error('Prop name must be a non-empty string!')
     if (typeof callback != 'function') throw new Error('Callback must be a function')
-    if (storeMethods.hasOwnProperty(prop)) throw new Error('Cannot listen to that property!')
-    if (!eventListeners.hasOwnProperty(prop)) eventListeners[prop] = []
-    const ourEventListeners = eventListeners[prop]
-    if (!ourEventListeners.includes(callback)) ourEventListeners.push(callback)
+    return propertyMapper.getHandler(prop).emitter.on(event, callback)
   }
 
   const storeProxy = new Proxy(store, {
     get: (target, prop) => {
-      if (strictFormat && !format.hasOwnProperty(prop))
+      if (typeof prop !== 'string') return Reflect.get(store, prop)
+      if (options.strictFormat && !format.hasOwnProperty(prop))
         throw new Error('Cannot access that property!')
-      let output = undefined
-      if (store.hasOwnProperty(prop)) {
-        output = store[prop]
-      } else if (computedProperties.hasOwnProperty(prop)) {
-        output = computedProperties[prop].apply(storeProxy)
-      } else if (storeMethods.hasOwnProperty(prop)) {
-        return storeMethods[prop] // Return the method without sanitizing
+      if (storeMethods.hasOwnProperty(prop)) {
+        return storeMethods[prop] // Return the method
       }
-      if (format.hasOwnProperty(prop)) {
-        sanitize(output, format[prop]) // Sanitize Output Values
-      }
-      return output
+      return propertyMapper.getHandler(prop).getValue()
     },
     set: (target, prop, value) => {
-      if (
-        storeMethods.hasOwnProperty(prop) ||
-        computedProperties.hasOwnProperty(prop) ||
-        reservedProperties.hasOwnProperty(prop)
-      )
+      if (typeof prop !== 'string') throw new Error('Can only assign string props')
+      if (storeMethods.hasOwnProperty(prop) || reservedProperties.hasOwnProperty(prop))
         throw new Error('Cannot assign that property!')
-      if (format.hasOwnProperty(prop)) {
-        sanitize(value, format[prop]) // Sanitize values before assigning them
-      } else if (strictFormat) {
-        throw new Error(`Property "${prop}" is not allowed`)
-      }
-      if (store.hasOwnProperty(prop) && store[prop] === value)
+      const propertyHandler = propertyMapper.getHandler(prop)
+      if (propertyMapper.hasProperty(prop) && deepEqual(propertyHandler.getValue(), value))
         return console.warn('Redundant value set, not triggering update.')
-      store[prop] = value
-      if (eventListeners.hasOwnProperty(prop)) {
-        eventListeners[prop].forEach(listener => {
-          try {
-            listener(value)
-          } catch (error) {
-            console.error(error)
-          }
-        })
-      }
+      propertyHandler.setValue(value)
       return true
     },
     deleteProperty: (target, prop) => {
       if (storeMethods.hasOwnProperty(prop)) throw new Error('Cannot delete that property!')
-      delete store[prop]
-      if (eventListeners.hasOwnProperty(prop)) {
-        eventListeners[prop].forEach(listener => {
-          try {
-            listener(undefined)
-          } catch (error) {
-            console.error(error)
-          }
-        })
-      }
-      return true
+      propertyMapper.getHandler(prop).delete()
     },
     has: (target, prop) => {
-      return prop in storeMethods || prop in store
+      return prop in storeMethods || propertyMapper.getHandler(prop).exists()
     },
     ownKeys: () => {
-      return Reflect.ownKeys(store)
-        .concat(Reflect.ownKeys(storeMethods))
-        .concat(Object.keys(computedProperties))
+      return propertyMapper.getKeys().concat(Reflect.ownKeys(storeMethods)).filter(onlyUnique)
+    },
+    getPrototypeOf: () => {
+      return Jabr.prototype
     }
   })
   return storeProxy

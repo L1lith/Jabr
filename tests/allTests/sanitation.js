@@ -1,6 +1,7 @@
 const makeID = require('../functions/makeID')
-const Jabr = require('../../dist/Jabr-commonjs')
+const Jabr = require('../../dist/Jabr')
 const chai = require('chai')
+const { Format } = require('sandhands')
 const { assert, expect } = chai
 
 describe('Data Sanitation', () => {
@@ -8,8 +9,8 @@ describe('Data Sanitation', () => {
     const store = new Jabr(
       {},
       {
-        format: {
-          age: Number
+        age: {
+          format: Format(Number)
         }
       }
     )
@@ -20,41 +21,34 @@ describe('Data Sanitation', () => {
       store.age = 32
     }).to.not.throw()
   })
-  it('should be strict by default', () => {
+  it('should not be strict by default', () => {
     const store = new Jabr(
       {},
       {
-        format: {
-          age: Number
-        }
-      }
-    )
-    expect(() => {
-      store.color = 'green'
-    }).to.throw()
-  })
-  it('should support being flagged as non-strict', () => {
-    const store = new Jabr(
-      {},
-      {
-        format: {
-          age: Number,
-          strict: false
-        }
+        age: { format: Number }
       }
     )
     expect(() => {
       store.color = 'green'
     }).to.not.throw()
   })
+  it('should support being flagged as strict', () => {
+    const store = new Jabr(
+      {},
+      {
+        age: { format: Number }
+      },
+      { strict: true }
+    )
+    expect(() => {
+      store.color = 'green'
+    }).to.throw()
+  })
   it('validates sanitation on computed properties with correct values', () => {
     const randomPropertyID = makeID()
-    const randomValue = Math.random()
-    const computedProperties = {}
-    computedProperties[randomPropertyID] = () => randomValue
-    const format = {}
-    format[randomPropertyID] = Number
-    const store = new Jabr({}, { computedProperties, format })
+    const properties = {}
+    properties[randomPropertyID] = { format: Number, compute: () => Math.random() }
+    const store = new Jabr({}, properties)
     expect(() => {
       store[randomPropertyID]
     }).to.not.throw()
@@ -63,10 +57,8 @@ describe('Data Sanitation', () => {
     const randomPropertyID = makeID()
     const randomValue = Math.random()
     const computedProperties = {}
-    computedProperties[randomPropertyID] = () => randomValue
-    const format = {}
-    format[randomPropertyID] = String
-    const store = new Jabr({}, { computedProperties, format })
+    computedProperties[randomPropertyID] = { compute: () => randomValue, format: String }
+    const store = new Jabr({}, computedProperties)
     expect(() => {
       store[randomPropertyID]
     }).to.throw()

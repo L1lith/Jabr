@@ -1,5 +1,5 @@
 const makeID = require('../functions/makeID')
-const Jabr = require('../../dist/Jabr-commonjs')
+const Jabr = require('../../dist/Jabr')
 const chai = require('chai')
 const { assert, expect } = chai
 
@@ -8,8 +8,8 @@ describe('Computed Properties', () => {
     const randomPropertyID = makeID()
     const randomValue = Math.random()
     const computedProperties = {}
-    computedProperties[randomPropertyID] = () => randomValue
-    const store = new Jabr({}, { computedProperties })
+    computedProperties[randomPropertyID] = { compute: () => randomValue }
+    const store = new Jabr({}, computedProperties)
     assert.strictEqual(store[randomPropertyID], randomValue)
   })
   it('returns a changing computed property correctly', () => {
@@ -18,15 +18,17 @@ describe('Computed Properties', () => {
     const replacementValue = Math.random() + 1 // Ensure it can't be the same value as the other random value
     let isReplaced = false
     const computedProperties = {}
-    computedProperties[randomPropertyID] = () => {
-      if (isReplaced === false) {
-        isReplaced = true
-        return randomValue
-      } else {
-        return replacementValue
+    computedProperties[randomPropertyID] = {
+      compute: () => {
+        if (isReplaced === false) {
+          isReplaced = true
+          return randomValue
+        } else {
+          return replacementValue
+        }
       }
     }
-    const store = new Jabr({}, { computedProperties })
+    const store = new Jabr({}, computedProperties)
     assert.strictEqual(store[randomPropertyID], randomValue)
     assert.strictEqual(store[randomPropertyID], replacementValue)
   })
@@ -34,8 +36,8 @@ describe('Computed Properties', () => {
     const randomPropertyID = makeID()
     const randomValue = Math.random()
     const computedProperties = {}
-    computedProperties[randomPropertyID] = () => randomValue
-    const store = new Jabr({}, { computedProperties })
+    computedProperties[randomPropertyID] = { compute: () => randomValue }
+    const store = new Jabr({}, computedProperties)
     assert.strictEqual(store[randomPropertyID], randomValue)
     expect(() => {
       store[randomPropertyID] = Math.random + 1
