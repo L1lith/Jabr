@@ -4,3 +4,4 @@ node_modules/
 /old-source/
 dist/
 !dist/Jabr.js
+!dist/Jabr.js.map

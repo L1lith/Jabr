@@ -16,14 +16,21 @@ function createJabr(...args) {
   const storeMethods = {}
   const store = new Jabr()
 
+  const validEvents = ['change', 'delete', 'set']
+
   // Disabled, please return back later //if (options.hasOwnProperty('storeFormat')) sanitize(initialStore, options.storeFormat)
   storeMethods.addEventListener = storeMethods.on = storeMethods.listen = (
     prop,
     callback,
     event = 'change'
   ) => {
-    if (typeof prop != 'string') throw new Error('Prop name must be a non-empty string!')
+    if (typeof prop != 'string') throw new Error('Prop name must be a string!')
     if (typeof callback != 'function') throw new Error('Callback must be a function')
+    if (typeof event != 'string' || !validEvents.includes(event))
+      throw new Error(
+        'Invalid event name, valid events: ' +
+          validEvents.map(event => '"' + event + '"').join(', ')
+      )
     return propertyMapper.getHandler(prop).emitter.on(event, callback)
   }
 
