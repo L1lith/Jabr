@@ -52,7 +52,7 @@ class PropertyHandler {
       this.setValue(this.config.value)
     }
   }
-  static normalizeConfigInput(propertyInput, propertyName) {
+  static normalizeConfigInput(propertyInput, propertyName, valueMap) {
     if (typeof propertyName != 'string') throw new Error('Must supply a property name')
     let output
     if (propertyInput === null) {
@@ -68,6 +68,10 @@ class PropertyHandler {
         'Invalid Store Property, expected a config object or another valid input, got ' +
           inspect(propertyInput)
       )
+    }
+    if (valueMap.hasOwnProperty(propertyName)) {
+      if (output.hasOwnProperty('value')) throw new Error('Cannot double assign the value')
+      output.value = valueMap[propertyName]
     }
     output.name = propertyName
     return output

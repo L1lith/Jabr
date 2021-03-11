@@ -43,4 +43,10 @@ describe('Computed Properties', () => {
       store[randomPropertyID] = Math.random + 1
     }).to.throw()
   })
+  it('cannot initialize values who are computed', () => {
+    expect(() => {
+      const store = new Jabr({ derp: 13 }, { derp: { compute: () => 12 } })
+      store.derp
+    }).to.throw()
+  })
 })

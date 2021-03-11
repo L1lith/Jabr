@@ -21,10 +21,14 @@ class PropertyMapper {
     //   : PropertyHandler.normalizeConfigInput({}, prop)
     let config
     if (this.config.properties.hasOwnProperty(prop)) {
-      config = PropertyHandler.normalizeConfigInput(this.config.properties[prop], prop)
+      config = PropertyHandler.normalizeConfigInput(
+        this.config.properties[prop],
+        prop,
+        this.config.valueMap
+      )
     } else {
       // if (!this.isStrict)
-      config = PropertyHandler.normalizeConfigInput(null, prop)
+      config = PropertyHandler.normalizeConfigInput(null, prop, this.config.valueMap)
     }
     const handler = new PropertyHandler(config, this)
     this.handlers[prop] = handler
