@@ -8,6 +8,21 @@ const optionsFormat = {
 }
 
 function parseJabrOptions(valueMap = {}, propertyOptions = {}, inputOptions = {}) {
+  if (valueMap === null) {
+    valueMap = {}
+  } else if (typeof valueMap != 'object') {
+    throw new Error('The value map must be an object')
+  }
+  if (valueMap === null) {
+    valueMap = {}
+  } else if (typeof valueMap != 'object') {
+    throw new Error('The property options map must be an object')
+  }
+  if (inputOptions === null) {
+    inputOptions = {}
+  } else if (typeof inputOptions != 'object') {
+    throw new Error('The options must be an object')
+  }
   let options = { ...inputOptions }
   const properties = {}
   Object.keys(propertyOptions).forEach(prop => {
@@ -20,11 +35,10 @@ function parseJabrOptions(valueMap = {}, propertyOptions = {}, inputOptions = {}
       options[prop.substring(1)] = propertyOptions[prop]
     } else {
       properties[prop] = propertyOptions[prop]
-      if (valueMap.hasOwnProperty(prop)) properties[prop].value = valueMap[prop]
     }
   })
   sanitize(options, optionsFormat)
-  return { options, properties }
+  return { options, properties, valueMap }
 }
 
 // function setPropertyOptions(propertyMap, property, options = {}) {

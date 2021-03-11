@@ -44,9 +44,11 @@ class PropertyHandler {
     this.emitter = new Emitter()
     // We must be sure to assign .doNormalize and .doSanitize before calling the .normalizeValue method
     if (this.config.hasOwnProperty('default')) {
+      if (this.calculated) throw new Error('Cannot assign a default value to a computed property')
       this.sanitizeValue(this.config.default)
     }
     if (this.config.hasOwnProperty('value')) {
+      if (this.calculated) throw new Error('Cannot assign a value to a computed property')
       this.setValue(this.config.value)
     }
   }
