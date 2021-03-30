@@ -29,7 +29,7 @@ const propertyConfigFormat = {
     validate: { _: Function, _or: [Function] },
     cacheLife: { _: Number, min: 0 }
   },
-  optionalProps: ['compute', 'format', 'default', 'normalize', 'value', 'validate']
+  optionalProps: ['compute', 'format', 'default', 'normalize', 'value', 'validate', 'cacheLife']
 }
 
 class PropertyHandler {
@@ -42,7 +42,7 @@ class PropertyHandler {
     this.doNormalize = this.config.hasOwnProperty('normalize')
     this.doSanitize = this.config.hasOwnProperty('format')
     this.doValidate = this.config.hasOwnProperty('validate')
-    this.properties = this.config
+    this.properties = this.config // TODO: WTF does this do?? lol
     this.isMapped = this.hasOwnProperty('mapper') && this.config.hasOwnProperty('name')
     this.emitter = new Emitter()
     // We must be sure to assign .doNormalize and .doSanitize before calling the .normalizeValue method
