@@ -4,14 +4,11 @@
   "description": "No-nonsense State Management",
   "source": "source/index.js",
   "main": "dist/Jabr.js",
-  "exports": "dist/Jabr.modern.js",
-  "module": "dist/Jabr.module.js",
-  "unpkg": "dist/Jabr.umd.js",
   "scripts": {
     "build": "microbundle",
     "dev": "microbundle watch",
     "test": "mocha \"tests/allTests/**/*.js\"",
-    "prepublish": ""
+    "prepublish": "npm test"
   },
   "repository": {
     "type": "git",
@@ -19,7 +16,11 @@
   },
   "keywords": [
     "state",
-    "react"
+    "react",
+    "data",
+    "management",
+    "proxy",
+    "json"
   ],
   "author": "L1lith",
   "license": "MIT",

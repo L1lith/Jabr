@@ -1,8 +1,8 @@
-import Jabr from './Jabr'
+import Jabr from '../classes/Jabr'
 import { sanitize, Format } from 'sandhands'
-import onlyUnique from './functions/onlyUnique'
-import parseJabrOptions from './functions/parseJabrOptions'
-import PropertyMapper from './functions/PropertyMapper'
+import onlyUnique from './onlyUnique'
+import parseJabrOptions from './parseJabrOptions'
+import PropertyMapper from '../classes/PropertyMapper'
 import deepEqual from 'deep-equal'
 
 const reservedProperties = ['on', 'listen', 'addEventListener', 'strict', 'format']

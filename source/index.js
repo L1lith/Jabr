@@ -1,5 +1,5 @@
-import createJabr from './createJabr'
-import Jabr from './Jabr'
+import createJabr from './functions/createJabr'
+import Jabr from './classes/Jabr'
 
 const exports = { createJabr, Jabr }
 

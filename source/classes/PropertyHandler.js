@@ -25,9 +25,11 @@ const propertyConfigFormat = {
     format: ANY,
     default: ANY,
     value: ANY,
-    normalize: Function
+    normalize: Function,
+    validate: { _: Function, _or: [Function] },
+    cacheLife: { _: Number, min: 0 }
   },
-  optionalProps: ['compute', 'format', 'default', 'normalize', 'value']
+  optionalProps: ['compute', 'format', 'default', 'normalize', 'value', 'validate']
 }
 
 class PropertyHandler {
@@ -39,6 +41,7 @@ class PropertyHandler {
     this.calculated = this.config.hasOwnProperty('compute')
     this.doNormalize = this.config.hasOwnProperty('normalize')
     this.doSanitize = this.config.hasOwnProperty('format')
+    this.doValidate = this.config.hasOwnProperty('validate')
     this.properties = this.config
     this.isMapped = this.hasOwnProperty('mapper') && this.config.hasOwnProperty('name')
     this.emitter = new Emitter()
@@ -88,8 +91,9 @@ class PropertyHandler {
     return !this.doNormalize ? value : this.config.normalize(value)
   }
   sanitizeValue(value) {
-    if (!this.doSanitize) return true
-    sanitize(value, this.config.format)
+    if (this.doSanitize) sanitize(value, this.config.format)
+    if (this.doValidate) {
+    }
     return true
   }
   getValue(store) {
