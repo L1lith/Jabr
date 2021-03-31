@@ -1,7 +1,10 @@
 import createJabr from './functions/createJabr'
 import Jabr from './classes/Jabr'
 
-const exports = { createJabr, Jabr }
+const exports = {
+  createJabr,
+  Jabr: new Proxy(Jabr, { construct: (target, args) => createJabr(...args) })
+}
 
 export default new Proxy(
   Object.assign(function (args) {
@@ -11,11 +14,11 @@ export default new Proxy(
     set: () => {
       throw new Error('Cannot overwrite the library')
     },
-    // get: (target, prop) => {
-    //   if (exports.hasOwnProperty(prop)) return exports[prop]
-    //   //console.warn(new Error('The library does not export "' + prop + '"'))
-    //   return Reflect.get({}, prop)
-    // },
+    get: (target, prop) => {
+      if (exports.hasOwnProperty(prop)) return exports[prop]
+      //console.warn(new Error('The library does not export "' + prop + '"'))
+      return Reflect.get({}, prop)
+    },
     getPrototypeOf: () => Jabr.prototype,
     setPrototypeOf: () => {
       throw new Error('Cannot overwrite the library')
