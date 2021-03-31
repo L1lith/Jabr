@@ -15,6 +15,7 @@ function createJabr(...args) {
   const eventListeners = {}
   const storeMethods = {}
   const store = new Jabr()
+  const secrets = { __args: jabrOptions }
 
   const validEvents = ['change', 'delete', 'set']
 
@@ -37,11 +38,14 @@ function createJabr(...args) {
   const storeProxy = new Proxy(store, {
     get: (target, prop) => {
       if (typeof prop !== 'string') return Reflect.get(store, prop)
-      if (options.strictFormat && !format.hasOwnProperty(prop))
-        throw new Error('Cannot access that property!')
       if (storeMethods.hasOwnProperty(prop)) {
         return storeMethods[prop] // Return the method
       }
+      if (secrets.hasOwnProperty(prop)) {
+        return secrets[prop]
+      }
+      if (options.strictFormat && !format.hasOwnProperty(prop))
+        throw new Error('Cannot access that property!')
       return propertyMapper.getHandler(prop).getValue()
     },
     set: (target, prop, value) => {
