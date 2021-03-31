@@ -1,6 +1,6 @@
 {
   "name": "jabr",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "No-nonsense State Management",
   "source": "source/index.js",
   "main": "dist/Jabr.js",
