@@ -17,6 +17,16 @@ describe('Normal Object Behavior', () => {
     store[randomPropertyID] = randomValue
     assert.strictEqual(store[randomPropertyID], randomValue)
   })
+  it('correcty returns the keys for initialized values', () => {
+    const data = { boat: true }
+    const store = new Jabr(data)
+    assert.deepEqual(Object.keys(store), Object.keys(data))
+  })
+  it('correcty returns the keys for values initialized in the property options', () => {
+    const properties = { boat: { value: true } }
+    const store = new Jabr({}, properties)
+    assert.deepEqual(Object.keys(store), Object.keys(properties))
+  })
   it('calls the callback function with the correct value when setting properties', done => {
     const store = new Jabr()
     const randomPropertyID = makeID()
