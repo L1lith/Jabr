@@ -1,14 +1,16 @@
 import PropertyHandler from './PropertyHandler'
 import autoBind from 'auto-bind'
+import onlyUnique from '../functions/onlyUnique'
 
 class PropertyMapper {
   constructor(jabrConfig, jabrProxy) {
     this.config = jabrConfig
     this.handlers = {}
     this.isStrict = !!this.config.options.strict
-    this.properties = Object.keys(this.config.properties).map(property =>
-      this.config.properties[property].hasOwnProperty('value')
-    )
+    this.properties = Object.keys(this.config.properties)
+      .filter(property => this.config.properties[property].hasOwnProperty('value'))
+      .concat(Object.keys(this.config.valueMap))
+      .filter(onlyUnique)
     autoBind(this)
   }
   getHandler(prop) {
@@ -33,6 +35,13 @@ class PropertyMapper {
     const handler = new PropertyHandler(config, this)
     this.handlers[prop] = handler
     return handler
+  }
+  export() {
+    const output = {}
+    this.properties.forEach(prop => {
+      output[prop] = this.getHandler(prop).getValue()
+    })
+    return output
   }
   getKeys() {
     return this.properties

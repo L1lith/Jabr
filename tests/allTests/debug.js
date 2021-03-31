@@ -6,11 +6,11 @@ const { assert, expect } = chai
 describe('Debug Behavior', () => {
   it('Allows hidden access to the input arguments', () => {
     const randomFunction = () => Math.random()
-    const store = new Jabr({ random: 12 }, { random: randomFunction }, { strict: true })
+    const store = new Jabr({ random: randomFunction }, { random: Function }, { strict: true })
     assert.deepEqual(store.__args, {
       options: { strict: true },
-      properties: { random: randomFunction },
-      valueMap: { random: 12 }
+      properties: { random: Function },
+      valueMap: { random: randomFunction }
     })
   })
 })

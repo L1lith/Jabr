@@ -49,4 +49,12 @@ describe('Normal Object Behavior', () => {
     }, defaultTimeout)
     delete store[randomPropertyID]
   })
+  it('toObject exports the internal values correctly', () => {
+    const randomPropertyID = makeID()
+    const randomValue = Math.random()
+    const storeObject = { potato: 'salad' }
+    storeObject[randomPropertyID] = randomValue
+    const jabr = new Jabr(storeObject)
+    assert.deepEqual(jabr.toObject(), storeObject)
+  })
 })
