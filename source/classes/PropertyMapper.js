@@ -7,10 +7,7 @@ class PropertyMapper {
     this.config = jabrConfig
     this.handlers = {}
     this.isStrict = !!this.config.options.strict
-    this.properties = Object.keys(this.config.properties)
-      .filter(property => this.config.properties[property].hasOwnProperty('value'))
-      .concat(Object.keys(this.config.valueMap))
-      .filter(onlyUnique)
+    this.valueMap = { ...this.config.valueMap }
     autoBind(this)
   }
   getHandler(prop) {
@@ -22,57 +19,32 @@ class PropertyMapper {
     //   ? this.config.properties[prop]
     //   : PropertyHandler.normalizeConfigInput({}, prop)
     let config
+
     if (this.config.properties.hasOwnProperty(prop)) {
-      config = PropertyHandler.normalizeConfigInput(
-        this.config.properties[prop],
-        prop,
-        this.config.valueMap
-      )
+      config = PropertyHandler.normalizeConfigInput(this.config.properties[prop])
     } else {
       // if (!this.isStrict)
-      config = PropertyHandler.normalizeConfigInput(null, prop, this.config.valueMap)
+      config = PropertyHandler.normalizeConfigInput(null)
     }
-    const handler = new PropertyHandler(config, this)
+    const handler = new PropertyHandler(config, this, prop)
     this.handlers[prop] = handler
     return handler
   }
   export() {
-    const output = {}
-    this.properties.forEach(prop => {
-      output[prop] = this.getHandler(prop).getValue()
-    })
-    return output
+    return { ...this.valueMap }
   }
   getKeys() {
-    return this.properties
+    return Object.keys(this.valueMap)
     // return Object.entries(this.handlers)
     //   .filter(([prop, handler]) => handler.exists())
     //   .map(([prop, handler]) => prop)
     //   .concat(Object.keys(this.config.properties))
   }
   getEntries() {
-    return Object.entries(this.handlers)
-      .filter(([prop, handler]) => handler.exists())
-      .map(([prop, handler]) => prop)
+    return Object.entries(this.valueMap)
   }
   hasProperty(prop) {
-    return this.properties.includes(prop)
-  }
-  addToPropsList(prop) {
-    if (!this.properties.includes(prop)) {
-      this.properties.push(prop)
-      return true
-    } else {
-      return false
-    }
-  }
-  removeFromPropsList(prop) {
-    if (this.properties.includes(prop)) {
-      this.properties = this.properties.filter(value => prop !== value)
-      return true
-    } else {
-      return false
-    }
+    return this.valueMap.hasOwnProperty(prop)
   }
 }
 

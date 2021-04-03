@@ -8,35 +8,52 @@ const optionsFormat = {
 }
 
 function parseJabrOptions(valueMap = {}, propertyOptions = {}, inputOptions = {}) {
-  if (valueMap === null) {
-    valueMap = {}
-  } else if (typeof valueMap != 'object') {
-    throw new Error('The value map must be an object')
-  }
-  if (valueMap === null) {
-    valueMap = {}
-  } else if (typeof valueMap != 'object') {
-    throw new Error('The property options map must be an object')
-  }
   if (inputOptions === null) {
     inputOptions = {}
   } else if (typeof inputOptions != 'object') {
     throw new Error('The options must be an object')
+  } else {
+    inputOptions = { ...inputOptions }
   }
   let options = { ...inputOptions }
-  const properties = {}
-  Object.keys(propertyOptions).forEach(prop => {
-    if (prop === '_') {
-      const newOptions = propertyOptions[prop]
-      if (typeof newOptions !== 'object' || newOptions === null)
-        throw new Error('The _ property must be an object of options')
-      options = { ...newOptions, ...options }
-    } else if (prop.startsWith('_')) {
-      options[prop.substring(1)] = propertyOptions[prop]
-    } else {
-      properties[prop] = propertyOptions[prop]
-    }
-  })
+  if (valueMap === null) {
+    valueMap = {}
+  } else if (typeof valueMap != 'object') {
+    throw new Error('The value map must be an object')
+  } else {
+    valueMap = { ...valueMap }
+  }
+  let properties = {}
+  if (propertyOptions === null) {
+    propertyOptions = {}
+  } else if (typeof propertyOptions != 'object') {
+    throw new Error('The property options map must be an object')
+  } else {
+    propertyOptions = { ...propertyOptions }
+    Object.entries(propertyOptions).forEach(([prop, config]) => {
+      if (config === null) return {}
+      if (typeof prop !== 'string') throw new Error('All props must be strings')
+      if (prop === '_') {
+        const newOptions = propertyOptions[prop]
+        if (typeof newOptions !== 'object' || newOptions === null)
+          throw new Error('The _ property must be an object of options')
+        options = { ...newOptions, ...options }
+      } else if (prop.startsWith('_')) {
+        options[prop.substring(1)] = propertyOptions[prop]
+      } else {
+        properties[prop] = propertyOptions[prop]
+      }
+      const hasValue = typeof config == 'object' && config.hasOwnProperty('value')
+      if (config.hasOwnProperty('compute') && (hasValue || valueMap.hasOwnProperty(prop))) {
+        throw new Error('Cannot both assign a value and provide a compute function')
+      }
+      if (typeof config == 'object' && hasValue) {
+        valueMap[prop] = config.value
+        delete config.value
+      }
+    })
+  }
+
   sanitize(options, optionsFormat)
   return { options, properties, valueMap }
 }

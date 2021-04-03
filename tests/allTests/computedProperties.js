@@ -29,8 +29,8 @@ describe('Computed Properties', () => {
       }
     }
     const store = new Jabr({}, computedProperties)
-    assert.strictEqual(store[randomPropertyID], randomValue)
-    assert.strictEqual(store[randomPropertyID], replacementValue)
+    assert.strictEqual(store[randomPropertyID], randomValue, 'random value')
+    assert.strictEqual(store[randomPropertyID], replacementValue, 'replacement value')
   })
   it('cannot overwrite computed properties', () => {
     const randomPropertyID = makeID()

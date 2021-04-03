@@ -20,7 +20,6 @@ import Emitter from 'tiny-emitter'
 
 const propertyConfigFormat = {
   _: {
-    name: String,
     compute: Function,
     format: ANY,
     default: ANY,
@@ -33,17 +32,21 @@ const propertyConfigFormat = {
 }
 
 class PropertyHandler {
-  constructor(config, mapper = null) {
+  constructor(config, mapper = null, propName) {
     PropertyHandler.validateConfig(config)
-    if (mapper !== null) this.mapper = mapper
+    if (mapper === null) throw new Error('Please supply the parent mapper')
+    this.mapper = mapper
+    this.valueMap = mapper.valueMap
+    this.propName = propName
     this.config = config
     this.changeListeners = []
     this.calculated = this.config.hasOwnProperty('compute')
+    console.log(this.config, this.calculated)
     this.doNormalize = this.config.hasOwnProperty('normalize')
     this.doSanitize = this.config.hasOwnProperty('format')
     this.doValidate = this.config.hasOwnProperty('validate')
-    this.properties = this.config // TODO: WTF does this do?? lol
-    this.isMapped = this.hasOwnProperty('mapper') && this.config.hasOwnProperty('name')
+    //this.properties = this.config // TODO: WTF does this do?? lol
+    //this.isMapped = this.hasOwnProperty('mapper') && this.config.hasOwnProperty('name')
     this.emitter = new Emitter()
     // We must be sure to assign .doNormalize and .doSanitize before calling the .normalizeValue method
     if (this.config.hasOwnProperty('default')) {
@@ -55,8 +58,7 @@ class PropertyHandler {
       this.setValue(this.config.value)
     }
   }
-  static normalizeConfigInput(propertyInput, propertyName, valueMap) {
-    if (typeof propertyName != 'string') throw new Error('Must supply a property name')
+  static normalizeConfigInput(propertyInput) {
     let output
     if (propertyInput === null) {
       output = {}
@@ -68,15 +70,11 @@ class PropertyHandler {
       output = { ...propertyInput }
     } else {
       throw new Error(
-        'Invalid Store Property, expected a config object or another valid input, got ' +
+        'Invalid Store Property, expected a config object or another valid input or null, got ' +
           inspect(propertyInput)
       )
     }
-    if (valueMap.hasOwnProperty(propertyName)) {
-      if (output.hasOwnProperty('value')) throw new Error('Cannot double assign the value')
-      output.value = valueMap[propertyName]
-    }
-    output.name = propertyName
+    // if (output.hasOwnProperty('value')) throw new Error('Internal Error Unexpected State')
     return output
   }
   static validateConfig(config) {
@@ -97,33 +95,33 @@ class PropertyHandler {
     return true
   }
   getValue(store) {
+    console.log(this.config, this.calculated)
     if (this.calculated) {
       const output = this.config.compute.apply(store)
       this.sanitizeValue(output)
       return output
     } else {
-      return this.hasOwnProperty('value') ? this.value : this.config.default
+      const { propName, valueMap } = this
+      return valueMap.hasOwnProperty(propName) ? valueMap[propName] : this.config.default
     }
   }
   setValue(value) {
     this.ensureEditable()
     value = this.normalizeValue(value)
     this.sanitizeValue(value)
-    if (this.isMapped) this.mapper.addToPropsList(this.config.name)
-    this.value = value
+    this.valueMap[this.propName] = value
     this.changeListeners.forEach(listener => listener(value))
     this.emitter.emit('set', value)
     this.emitter.emit('change', value, 'set')
   }
   delete() {
     this.ensureEditable()
-    delete this.value
-    if (this.isMapped) this.mapper.removeFromPropsList(this.config.name)
+    delete this.valueMap[this.propName]
     this.emitter.emit('delete')
     this.emitter.emit('change', this.config.default, 'delete')
   }
   exists() {
-    return this.hasOwnProperty('value') || this.config.hasOwnProperty('default')
+    return this.valueMap.hasOwnProperty(this.propName)
   }
   ensureEditable() {
     if (this.calculated)

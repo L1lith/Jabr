@@ -27,7 +27,7 @@ describe('Data Sanitation', () => {
       {
         age: { format: Number }
       }
-    )
+    ) 
     expect(() => {
       store.color = 'green'
     }).to.not.throw()

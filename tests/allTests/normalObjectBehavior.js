@@ -1,7 +1,7 @@
 const makeID = require('../functions/makeID')
 const Jabr = require('../../dist/Jabr')
 const chai = require('chai')
-const { assert } = chai
+const { assert, expect } = chai
 
 const defaultTimeout = 1000 * 30 // 30 seconds
 
@@ -17,12 +17,13 @@ describe('Normal Object Behavior', () => {
     store[randomPropertyID] = randomValue
     assert.strictEqual(store[randomPropertyID], randomValue)
   })
-  it('correcty returns the keys for initialized values', () => {
+  it('correctly returns the keys for initialized values', () => {
     const data = { boat: true }
     const store = new Jabr(data)
+    //throw new Error(require('util').inspect([Object.keys(store), Object.keys(data)]))
     assert.deepEqual(Object.keys(store), Object.keys(data))
   })
-  it('correcty returns the keys for values initialized in the property options', () => {
+  it('correctly returns the keys for values initialized in the property options', () => {
     const properties = { boat: { value: true } }
     const store = new Jabr({}, properties)
     assert.deepEqual(Object.keys(store), Object.keys(properties))
@@ -66,5 +67,12 @@ describe('Normal Object Behavior', () => {
     storeObject[randomPropertyID] = randomValue
     const jabr = new Jabr(storeObject)
     assert.deepEqual(jabr.toObject(), storeObject)
+  })
+  it("doesn't accept symbols as properties", () => {
+    const symbol = Symbol(Math.random())
+    const jabr = new Jabr()
+    expect(() => {
+      jabr[symbol] = 12
+    }).to.throw()
   })
 })

@@ -4,6 +4,7 @@ import onlyUnique from './onlyUnique'
 import parseJabrOptions from './parseJabrOptions'
 import PropertyMapper from '../classes/PropertyMapper'
 import deepEqual from 'deep-equal'
+import { inspect } from 'util'
 
 const reservedProperties = ['on', 'listen', 'addEventListener', 'strict', 'format']
 
@@ -35,11 +36,13 @@ function createJabr(...args) {
     return propertyMapper.getHandler(prop).emitter.on(event, callback)
   }
 
-  storeMethods.toObject = () => propertyMapper.export()
+  storeMethods.toObject = storeMethods.valueOf = () => propertyMapper.export()
 
   const storeProxy = new Proxy(store, {
     get: (target, prop) => {
-      if (typeof prop !== 'string') return Reflect.get(store, prop)
+      if (typeof prop === 'symbol') return Reflect.get(propertyMapper.valueMap, prop)
+      if (typeof prop !== 'string')
+        throw new Error("Jabr doesn't support non string properties, got: " + inspect(prop))
       if (storeMethods.hasOwnProperty(prop)) {
         return storeMethods[prop] // Return the method
       }
@@ -61,14 +64,15 @@ function createJabr(...args) {
       return true
     },
     deleteProperty: (target, prop) => {
-      if (storeMethods.hasOwnProperty(prop)) throw new Error('Cannot delete that property!')
+      if (storeMethods.hasOwnProperty(prop) || secrets.hasOwnProperty(prop))
+        throw new Error('Cannot delete that property!')
       propertyMapper.getHandler(prop).delete()
     },
     has: (target, prop) => {
-      return prop in storeMethods || propertyMapper.getHandler(prop).exists()
+      return propertyMapper.hasProperty(prop)
     },
     ownKeys: () => {
-      return propertyMapper.getKeys().concat(Reflect.ownKeys(storeMethods)).filter(onlyUnique)
+      return propertyMapper.getKeys() //.filter(onlyUnique) //.concat(Reflect.ownKeys(storeMethods))
     },
     getPrototypeOf: () => {
       return Jabr.prototype
