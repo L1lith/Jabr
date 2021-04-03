@@ -41,7 +41,6 @@ class PropertyHandler {
     this.config = config
     this.changeListeners = []
     this.calculated = this.config.hasOwnProperty('compute')
-    console.log(this.config, this.calculated)
     this.doNormalize = this.config.hasOwnProperty('normalize')
     this.doSanitize = this.config.hasOwnProperty('format')
     this.doValidate = this.config.hasOwnProperty('validate')
@@ -81,7 +80,7 @@ class PropertyHandler {
     try {
       sanitize(config, propertyConfigFormat)
     } catch (error) {
-      console.log(config, details(config, propertyConfigFormat))
+      //console.log(config, details(config, propertyConfigFormat))
       throw error
     }
   }
@@ -95,7 +94,6 @@ class PropertyHandler {
     return true
   }
   getValue(store) {
-    console.log(this.config, this.calculated)
     if (this.calculated) {
       const output = this.config.compute.apply(store)
       this.sanitizeValue(output)

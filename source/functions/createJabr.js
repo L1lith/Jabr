@@ -38,7 +38,7 @@ function createJabr(...args) {
 
   storeMethods.toObject = storeMethods.valueOf = () => propertyMapper.export()
 
-  const storeProxy = new Proxy(store, {
+  const storeProxy = new Proxy(propertyMapper.valueMap, {
     get: (target, prop) => {
       if (typeof prop === 'symbol') return Reflect.get(propertyMapper.valueMap, prop)
       if (typeof prop !== 'string')
