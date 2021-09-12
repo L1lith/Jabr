@@ -78,6 +78,6 @@ We can use the syncToJSON method in order to synchronously save our store to a J
 ```js
 const {Jabr, syncToJSON} = require('jabr')
 const store = new Jabr()
-syncToJSON(store, 'data.json')
+syncToJSON(store, 'data.json') // Loads any existing data in data.json (if it exists), overwriting any conflicting properties in the store
 store.snack = "cookie" // Synchronously saves this data to the data.json file when we modify the store
 ```
