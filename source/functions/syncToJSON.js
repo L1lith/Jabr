@@ -21,6 +21,7 @@ function syncToJSON(store, jsonPath) {
   store.on('*', () => {
     writeFileSync(jsonPath, JSON.stringify(store))
   })
+  return store
 }
 
 export default syncToJSON
