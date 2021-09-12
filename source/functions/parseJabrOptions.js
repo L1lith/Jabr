@@ -7,7 +7,7 @@ const optionsFormat = {
   allOptional: true
 }
 
-// Interprets and validates the arguments passed to the createJabr function
+// Interprets and validates the arguments passed to the createJabr functionf
 function parseJabrOptions(valueMap = {}, propertyOptions = {}, inputOptions = {}) {
   if (inputOptions === null) {
     inputOptions = {}
