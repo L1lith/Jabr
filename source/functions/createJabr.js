@@ -8,6 +8,7 @@ import { inspect } from 'util'
 
 const reservedProperties = ['on', 'listen', 'addEventListener', 'strict', 'format']
 
+// the createJabr function creates a user-facing Proxy that wraps the internal PropertyMapper
 function createJabr(...args) {
   const jabrOptions = parseJabrOptions(...args)
   const { options } = jabrOptions
@@ -18,23 +19,26 @@ function createJabr(...args) {
   const store = new Jabr()
   const secrets = { __args: jabrOptions }
 
-  const validEvents = ['change', 'delete', 'set']
+  const validEvents = ['change', 'delete', 'set', 'assign']
 
   // Disabled, please return back later //if (options.hasOwnProperty('storeFormat')) sanitize(initialStore, options.storeFormat)
-  storeMethods.addEventListener = storeMethods.on = storeMethods.listen = (
-    prop,
-    callback,
-    event = 'change'
-  ) => {
-    if (typeof prop != 'string') throw new Error('Prop name must be a string!')
-    if (typeof callback != 'function') throw new Error('Callback must be a function')
-    if (typeof event != 'string' || !validEvents.includes(event))
-      throw new Error(
-        'Invalid event name, valid events: ' +
-          validEvents.map(event => '"' + event + '"').join(', ')
-      )
-    return propertyMapper.getHandler(prop).emitter.on(event, callback)
-  }
+  storeMethods.addEventListener =
+    storeMethods.on =
+    storeMethods.listen =
+      (prop, callback, event = 'change') => {
+        if (typeof prop != 'string') throw new Error('Prop name must be a string!')
+        if (typeof callback != 'function') throw new Error('Callback must be a function')
+        if (typeof event != 'string' || !validEvents.includes(event))
+          throw new Error(
+            'Invalid event name, valid events: ' +
+              validEvents.map(event => '"' + event + '"').join(', ')
+          )
+        if (prop === '*') {
+          propertyMapper.addWildcardHandler(callback)
+        } else {
+          propertyMapper.getHandler(prop).emitter.on(event, callback)
+        }
+      }
 
   storeMethods.toObject = storeMethods.valueOf = () => propertyMapper.export()
 
@@ -58,8 +62,10 @@ function createJabr(...args) {
       if (storeMethods.hasOwnProperty(prop) || reservedProperties.hasOwnProperty(prop))
         throw new Error('Cannot assign that property!')
       const propertyHandler = propertyMapper.getHandler(prop)
-      if (propertyMapper.hasProperty(prop) && deepEqual(propertyHandler.getValue(), value))
-        return console.warn('Redundant value set, not triggering update.')
+      if (propertyMapper.hasProperty(prop) && deepEqual(propertyHandler.getValue(), value)) {
+        console.warn('Redundant value set, not triggering update.')
+        return true
+      }
       propertyHandler.setValue(value)
       return true
     },

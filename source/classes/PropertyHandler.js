@@ -2,22 +2,6 @@ import { sanitize, ANY, Format, details } from 'sandhands'
 import { inspect } from 'util'
 import Emitter from 'tiny-emitter'
 
-// const propertyConfigFormat = {
-//   _: {},
-//   standard: {
-//     _: {
-//       name: String,
-//       compute: Function,
-//       format: ANY,
-//       default: ANY,
-//       value: ANY,
-//       normalize: Function
-//     },
-//     optionalProps: ['compute', 'format', 'default', 'normalize', 'value']
-//   },
-//   strict: false
-// }
-
 const propertyConfigFormat = {
   _: {
     compute: Function,
@@ -31,6 +15,7 @@ const propertyConfigFormat = {
   optionalProps: ['compute', 'format', 'default', 'normalize', 'value', 'validate', 'cacheLife']
 }
 
+// The PropertyHandler handles the interactions for a single property
 class PropertyHandler {
   constructor(config, mapper = null, propName) {
     PropertyHandler.validateConfig(config)
@@ -39,7 +24,7 @@ class PropertyHandler {
     this.valueMap = mapper.valueMap
     this.propName = propName
     this.config = config
-    this.changeListeners = []
+    //this.changeListeners = []
     this.calculated = this.config.hasOwnProperty('compute')
     this.doNormalize = this.config.hasOwnProperty('normalize')
     this.doSanitize = this.config.hasOwnProperty('format')
@@ -103,14 +88,14 @@ class PropertyHandler {
       return valueMap.hasOwnProperty(propName) ? valueMap[propName] : this.config.default
     }
   }
-  setValue(value) {
+  setValue(value, ...args) {
     this.ensureEditable()
     value = this.normalizeValue(value)
     this.sanitizeValue(value)
     this.valueMap[this.propName] = value
-    this.changeListeners.forEach(listener => listener(value))
-    this.emitter.emit('set', value)
-    this.emitter.emit('change', value, 'set')
+    //this.changeListeners.forEach(listener => listener(value))
+    this.emitter.emit('set', value, ...args)
+    this.emitter.emit('change', value, 'set', ...args)
   }
   delete() {
     this.ensureEditable()
