@@ -11,7 +11,7 @@ function syncToJSON(store, jsonPath) {
   }
   if (data !== null) {
     const oldWarn = console.warn
-    console.warn = () => {}
+    console.warn = () => {} // Suppress Redundancy Warnings
     Object.entries(data).forEach(([key, value]) => {
       store[key] = value
     })
