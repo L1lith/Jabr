@@ -1,6 +1,6 @@
 import Jabr from './classes/JabrClass'
-import { sanitize, Format } from 'sandhands'
-import onlyUnique from './functions/onlyUnique'
+// import { sanitize, Format } from 'sandhands'
+// import onlyUnique from './functions/onlyUnique'
 import parseJabrOptions from './functions/parseJabrOptions'
 import PropertyMapper from './classes/PropertyMapper'
 import { inspect } from 'util'
@@ -13,9 +13,9 @@ function createJabr(...args) {
   const { options } = jabrOptions
   const propertyMapper = new PropertyMapper(jabrOptions)
 
-  const eventListeners = {}
+  //const eventListeners = {}
   const storeMethods = {}
-  const store = new Jabr()
+  //const store = new Jabr()
   const secrets = { __args: jabrOptions }
 
   const validEvents = ['change', 'delete', 'set', 'assign']
@@ -45,7 +45,7 @@ function createJabr(...args) {
     get: (target, prop) => {
       if (typeof prop === 'symbol') return Reflect.get(propertyMapper.valueMap, prop)
       if (typeof prop !== 'string')
-        throw new Error("Jabr doesn't support non string properties, got: " + inspect(prop))
+        throw new Error('Jabr doesn\'t support non string properties, got: ' + inspect(prop))
       if (storeMethods.hasOwnProperty(prop)) {
         return storeMethods[prop] // Return the method
       }

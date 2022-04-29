@@ -44,8 +44,8 @@ function parseJabrOptions(valueMap = {}, propertyOptions = {}, inputOptions = {}
       } else {
         properties[prop] = propertyOptions[prop]
       }
-      const hasValue = typeof config == 'object' && config.hasOwnProperty('value')
-      if (config.hasOwnProperty('compute') && (hasValue || valueMap.hasOwnProperty(prop))) {
+      const hasValue = typeof config == 'object' && 'value' in config
+      if ('compute' in config && (hasValue || prop in valueMap)) {
         throw new Error('Cannot both assign a value and provide a compute function')
       }
       if (typeof config == 'object' && hasValue) {

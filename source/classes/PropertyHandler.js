@@ -108,7 +108,7 @@ class PropertyHandler {
   }
   ensureEditable() {
     if (this.calculated)
-      throw new Error("Cannot edit this property, it's a dynamically calculated value")
+      throw new Error('Cannot edit this property, it\'s a dynamically calculated value')
   }
   onChange(handler) {
     try {
