@@ -1,4 +1,4 @@
-import Jabr from '../Jabr'
+import Jabr from '../classes/JabrClass'
 import { sanitize, Format } from 'sandhands'
 import onlyUnique from './onlyUnique'
 import parseJabrOptions from './parseJabrOptions'
