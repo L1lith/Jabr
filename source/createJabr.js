@@ -46,19 +46,18 @@ function createJabr(...args) {
       if (typeof prop === 'symbol') return Reflect.get(propertyMapper.valueMap, prop)
       if (typeof prop !== 'string')
         throw new Error('Jabr doesn\'t support non string properties, got: ' + inspect(prop))
-      if (storeMethods.hasOwnProperty(prop)) {
+      if (prop in storeMethods) {
         return storeMethods[prop] // Return the method
       }
-      if (secrets.hasOwnProperty(prop)) {
+      if (prop in secrets) {
         return secrets[prop]
       }
-      if (options.strictFormat && !format.hasOwnProperty(prop))
-        throw new Error('Cannot access that property!')
+      if (options.strictFormat && !(prop in format)) throw new Error('Cannot access that property!')
       return propertyMapper.getHandler(prop).getValue()
     },
     set: (target, prop, value) => {
       if (typeof prop !== 'string') throw new Error('Can only assign string props')
-      if (storeMethods.hasOwnProperty(prop) || reservedProperties.hasOwnProperty(prop))
+      if (prop in storeMethods || prop in reservedProperties)
         throw new Error('Cannot assign that property!')
       const propertyHandler = propertyMapper.getHandler(prop)
       if (propertyMapper.hasProperty(prop) && propertyHandler.getValue() === value) {
@@ -69,8 +68,7 @@ function createJabr(...args) {
       return true
     },
     deleteProperty: (target, prop) => {
-      if (storeMethods.hasOwnProperty(prop) || secrets.hasOwnProperty(prop))
-        throw new Error('Cannot delete that property!')
+      if (prop in storeMethods || prop in secrets) throw new Error('Cannot delete that property!')
       propertyMapper.getHandler(prop).delete()
     },
     has: (target, prop) => {

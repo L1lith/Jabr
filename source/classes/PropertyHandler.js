@@ -1,4 +1,4 @@
-import { sanitize, ANY, Format, details } from 'sandhands'
+import { sanitize, ANY, Format } from 'sandhands'
 import { inspect } from 'util'
 import Emitter from 'tiny-emitter'
 
@@ -25,19 +25,19 @@ class PropertyHandler {
     this.propName = propName
     this.config = config
     //this.changeListeners = []
-    this.calculated = this.config.hasOwnProperty('compute')
-    this.doNormalize = this.config.hasOwnProperty('normalize')
-    this.doSanitize = this.config.hasOwnProperty('format')
-    this.doValidate = this.config.hasOwnProperty('validate')
+    this.calculated = 'compute' in this.config
+    this.doNormalize = 'normalize' in this.config
+    this.doSanitize = 'format' in this.config
+    this.doValidate = 'validate' in this.config
     //this.properties = this.config // TODO: WTF does this do?? lol
     //this.isMapped = this.hasOwnProperty('mapper') && this.config.hasOwnProperty('name')
     this.emitter = new Emitter()
     // We must be sure to assign .doNormalize and .doSanitize before calling the .normalizeValue method
-    if (this.config.hasOwnProperty('default')) {
+    if ('default' in this.config) {
       if (this.calculated) throw new Error('Cannot assign a default value to a computed property')
       this.sanitizeValue(this.config.default)
     }
-    if (this.config.hasOwnProperty('value')) {
+    if ('value' in this.config) {
       if (this.calculated) throw new Error('Cannot assign a value to a computed property')
       this.setValue(this.config.value)
     }
@@ -62,20 +62,21 @@ class PropertyHandler {
     return output
   }
   static validateConfig(config) {
-    try {
-      sanitize(config, propertyConfigFormat)
-    } catch (error) {
-      //console.log(config, details(config, propertyConfigFormat))
-      throw error
-    }
+    sanitize(config, propertyConfigFormat)
+    // try {
+
+    // } catch (error) {
+    //   //console.log(config, details(config, propertyConfigFormat))
+    //   throw error
+    // }
   }
   normalizeValue(value) {
     return !this.doNormalize ? value : this.config.normalize(value)
   }
   sanitizeValue(value) {
     if (this.doSanitize) sanitize(value, this.config.format)
-    if (this.doValidate) {
-    }
+    // if (this.doValidate) {
+    // }
     return true
   }
   getValue(store) {
@@ -85,7 +86,7 @@ class PropertyHandler {
       return output
     } else {
       const { propName, valueMap } = this
-      return valueMap.hasOwnProperty(propName) ? valueMap[propName] : this.config.default
+      return propName in valueMap ? valueMap[propName] : this.config.default
     }
   }
   setValue(value, ...args) {
@@ -104,7 +105,7 @@ class PropertyHandler {
     this.emitter.emit('change', this.config.default, 'delete')
   }
   exists() {
-    return this.valueMap.hasOwnProperty(this.propName)
+    return this.propName in this.valueMap
   }
   ensureEditable() {
     if (this.calculated)
