@@ -1,4 +1,4 @@
 import JabrClass from './classes/JabrClass'
-import createJabr from './functions/createJabr'
+import createJabr from './createJabr'
 
 export default new Proxy(JabrClass, { construct: (target, args) => createJabr(...args) })

@@ -1,6 +1,5 @@
 import PropertyHandler from './PropertyHandler'
 import autoBind from 'auto-bind'
-import onlyUnique from '../functions/onlyUnique'
 
 // The PropertyMapper acts like the internal jabr store object
 // It automates the instantiation of PropertyHandlers and the other functionality of the store
