@@ -2,14 +2,13 @@
   "name": "jabr",
   "version": "0.2.9",
   "description": "No-nonsense State Management",
-  "source": "source/index.js",
-  "main": "dist/Jabr.js",
+  "main": "index.js",
   "scripts": {
-    "build": "microbundle",
-    "dev": "microbundle watch",
-    "build-production": "cross-env NODE_ENV=production microbundle",
+    "build": "rm -rf dist && mkdir dist && cross-env NODE_ENV=production babel source -d dist",
+    "dev": "rm -rf dist && mkdir dist && babel source -d dist --watch",
     "test": "mocha \"tests/allTests/**/*.js\"",
-    "prepublishOnly": "npm run build-production&&npm run test"
+    "prepub": "npm run build && npm run test && cp package.json dist && cp LICENSE.md dist && cp README.md dist && json -f dist/package.json -I -e 'delete this.scripts; delete this.devDependencies;'",
+    "pub": "cd dist && npm publish"
   },
   "repository": {
     "type": "git",
@@ -30,9 +29,11 @@
   },
   "homepage": "https://github.com/L1lith/Jabr#readme",
   "devDependencies": {
-    "@babel/core": "^7.13.8",
-    "@babel/preset-env": "^7.13.9",
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.9",
+    "@babel/preset-env": "^7.16.11",
     "auto-bind": "^1.2.1",
+    "babel-plugin-add-module-exports": "^1.0.4",
     "chai": "^4.3.3",
     "cross-env": "^7.0.3",
     "deepmerge": "^4.2.2",

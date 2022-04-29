@@ -7,11 +7,11 @@ const exportFormat = { _: { Jabr: Function, createJabr: Function, syncToJSON: Fu
 describe('Has the correct exports', () => {
   it('loads the library successfully', () => {
     expect(() => {
-      require('../../dist/Jabr')
+      require('../../dist/')
     }).to.not.throw()
   })
   it('returns the correct exports', () => {
-    const jabr = require('../../dist/Jabr')
+    const jabr = require('../../dist/')
     //throw details(jabr, exportFormat)
     //throw jabr
     //throw exportFormat
