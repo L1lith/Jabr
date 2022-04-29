@@ -1,5 +1,5 @@
 const makeID = require('../functions/makeID')
-const Jabr = require('../../dist/Jabr')
+const { Jabr } = require('../../dist/Jabr')
 const chai = require('chai')
 const { assert, expect } = chai
 
