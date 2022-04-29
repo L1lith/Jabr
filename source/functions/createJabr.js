@@ -3,7 +3,6 @@ import { sanitize, Format } from 'sandhands'
 import onlyUnique from './onlyUnique'
 import parseJabrOptions from './parseJabrOptions'
 import PropertyMapper from '../classes/PropertyMapper'
-import deepEqual from 'deep-equal'
 import { inspect } from 'util'
 
 const reservedProperties = ['on', 'listen', 'addEventListener', 'strict', 'format']
@@ -62,7 +61,7 @@ function createJabr(...args) {
       if (storeMethods.hasOwnProperty(prop) || reservedProperties.hasOwnProperty(prop))
         throw new Error('Cannot assign that property!')
       const propertyHandler = propertyMapper.getHandler(prop)
-      if (propertyMapper.hasProperty(prop) && deepEqual(propertyHandler.getValue(), value)) {
+      if (propertyMapper.hasProperty(prop) && propertyHandler.getValue() === value) {
         console.warn('Redundant value set, not triggering update.')
         return true
       }
