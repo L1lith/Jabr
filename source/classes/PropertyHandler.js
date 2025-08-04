@@ -115,7 +115,7 @@ class PropertyHandler {
     try {
       this.ensureEditable()
     } catch (error) {
-      throw new Error('Cannot assign listeners to a non-editable property.')
+      throw new Error('Cannot assign listeners to a non-editable property.', error)
     }
     this.emitter.on('change', handler)
   }

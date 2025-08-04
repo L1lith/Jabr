@@ -10,7 +10,7 @@ const reservedProperties = ['on', 'listen', 'addEventListener', 'strict', 'forma
 // the createJabr function creates a user-facing Proxy that wraps the internal PropertyMapper
 function createJabr(...args) {
   const jabrOptions = parseJabrOptions(...args)
-  const { options } = jabrOptions
+  //const { options } = jabrOptions
   const propertyMapper = new PropertyMapper(jabrOptions)
 
   //const eventListeners = {}
@@ -45,14 +45,14 @@ function createJabr(...args) {
     get: (target, prop) => {
       if (typeof prop === 'symbol') return Reflect.get(propertyMapper.valueMap, prop)
       if (typeof prop !== 'string')
-        throw new Error("Jabr doesn't support non string properties, got: " + inspect(prop))
+        throw new Error('Jabr doesn\'t support non string properties, got: ' + inspect(prop))
       if (prop in storeMethods) {
         return storeMethods[prop] // Return the method
       }
       if (prop in secrets) {
         return secrets[prop]
       }
-      if (options.strictFormat && !(prop in format)) throw new Error('Cannot access that property!')
+      // TODO: THIS LINE IS BROKEN HELP LOL //if (options.strictFormat && !(prop in format)) throw new Error('Cannot access that property!')
       return propertyMapper.getHandler(prop).getValue()
     },
     set: (target, prop, value) => {
