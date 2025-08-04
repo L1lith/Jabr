@@ -1,4 +1,4 @@
-const { readFileSync, writeFileSync } = require('fs')
+import { readFileSync, writeFileSync } from 'fs'
 //const { readFile, writeFile } = require('fs/promises')
 
 function syncToJSON(store, jsonPath) {
