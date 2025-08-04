@@ -7,12 +7,12 @@ const exportsFormats = { Jabr: Function, createJabr: Function }
 describe('Has the correct exports', () => {
   it('loads the library successfully', () => {
     expect(() => {
-      require('../../dist/Jabr')
+      require('../../dist/index.js')
     }).to.not.throw()
   })
   it('returns the correct exports', () => {
-    const jabr = require('../../dist/Jabr')
-    expect(jabr).to.be.a('function', 'the default export is a function')
+    const jabr = require('../../dist/index.js')
+    expect(jabr).to.be.a('object', 'the default export is an object')
     Object.entries(exportsFormats).forEach(([name, format]) => {
       assert.strictEqual(details(jabr[name], format), null, `${name} export is well formatted.`)
     })

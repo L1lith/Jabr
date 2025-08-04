@@ -1,5 +1,5 @@
 const makeID = require('../functions/makeID')
-const Jabr = require('../../dist/Jabr')
+const { Jabr } = require('../../dist/')
 const chai = require('chai')
 const { Format } = require('sandhands')
 const { assert, expect } = chai
@@ -27,7 +27,7 @@ describe('Data Sanitation', () => {
       {
         age: { format: Number }
       }
-    ) 
+    )
     expect(() => {
       store.color = 'green'
     }).to.not.throw()

@@ -1,4 +1,4 @@
-const { Jabr, syncToJSON } = require('../../dist/Jabr')
+const { Jabr, syncToJSON } = require('../../dist/')
 const chai = require('chai')
 const { readFileSync, mkdirSync } = require('fs')
 const { assert, expect } = chai
