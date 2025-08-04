@@ -1,6 +1,6 @@
 {
   "name": "jabr",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "No-nonsense State Management",
   "source": "source/index.js",
   "main": "dist/Jabr.js",
@@ -32,7 +32,6 @@
   "devDependencies": {
     "@babel/core": "^7.13.8",
     "@babel/preset-env": "^7.13.9",
-    "auto-bind": "^1.2.1",
     "chai": "^4.3.3",
     "cross-env": "^7.0.3",
     "deepmerge": "^4.2.2",
@@ -46,6 +45,7 @@
     "rollup-plugin-uglify": "^6.0.3"
   },
   "dependencies": {
+    "auto-bind": "^1.2.1",
     "deep-equal": "^2.0.5",
     "sandhands": "^1.8.3",
     "tiny-emitter": "^2.1.0"
