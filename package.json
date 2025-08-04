@@ -9,7 +9,7 @@
     "test": "mocha \"tests/allTests/**/*.js\"",
     "lint": "npx eslint --fix source",
     "pretty": "prettier --write \"./**/*.js\"",
-    "prepub": "npm run pretty && npm run lint && npm run build && npm run test && cp package.json dist && cp LICENSE.md dist && cp README.md dist && json -f dist/package.json -I -e 'delete this.scripts; delete this.devDependencies;'",
+    "prepub": "npm run pretty && npm run lint && npm run build && npm run test && cp package.json dist && cp LICENSE.md dist && cp README.md dist && node ./cleanupPackage.js",
     "pub": "cd dist && npm publish"
   },
   "repository": {
