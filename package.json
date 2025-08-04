@@ -4,7 +4,7 @@
   "description": "No-nonsense State Management",
   "main": "index.js",
   "scripts": {
-    "build": "rm -rf dist && mkdir dist && cp package.json dist && cross-env NODE_ENV=production babel source -d dist",
+    "build": "rm -rf dist && mkdir dist && cross-env NODE_ENV=production babel source -d dist",
     "dev": "rm -rf dist && mkdir dist && babel source -d dist --watch",
     "test": "mocha \"tests/allTests/**/*.js\"",
     "lint": "npx eslint --fix source",
