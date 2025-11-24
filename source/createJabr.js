@@ -19,6 +19,7 @@ function createJabr(...args) {
   const secrets = { __args: jabrOptions }
 
   const validEvents = ['change', 'delete', 'set', 'assign']
+  let storeProxy
 
   // Disabled, please return back later //if (options.hasOwnProperty('storeFormat')) sanitize(initialStore, options.storeFormat)
   storeMethods.addEventListener =
@@ -40,17 +41,27 @@ function createJabr(...args) {
       }
 
   storeMethods.toObject = storeMethods.valueOf = () => propertyMapper.export()
+  storeMethods.getSignal = prop => {
+    const set = value => (storeProxy[prop] = value)
+    const get = () => storeProxy[prop]
+    const signal = [get, set]
+    signal.__signal = true
+    return signal
+  }
 
-  const storeProxy = new Proxy(propertyMapper.valueMap, {
+  storeProxy = new Proxy(propertyMapper.valueMap, {
     get: (target, prop) => {
       if (typeof prop === 'symbol') return Reflect.get(propertyMapper.valueMap, prop)
       if (typeof prop !== 'string')
-        throw new Error('Jabr doesn\'t support non string properties, got: ' + inspect(prop))
+        throw new Error("Jabr doesn't support non string properties, got: " + inspect(prop))
       if (prop in storeMethods) {
         return storeMethods[prop] // Return the method
       }
       if (prop in secrets) {
         return secrets[prop]
+      }
+      if (prop.startsWith('$')) {
+        // Return a Signal
       }
       // TODO: THIS LINE IS BROKEN HELP LOL //if (options.strictFormat && !(prop in format)) throw new Error('Cannot access that property!')
       return propertyMapper.getHandler(prop).getValue()
