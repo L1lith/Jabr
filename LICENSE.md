@@ -1,21 +1,31 @@
-MIT License
+The Earth Stewardship MIT Variant License (ESMV)
 
-Copyright (c) 2018 L1lith
+Copyright (c) 2025 Lili a.k.a. [L1lith](https://github.com/L1lith)
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software (or anything else being published under the license) and associated documentation files (the "Software" which may or may not refer to literal software), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. The Software must be used, either directly or indirectly, for the betterment of the planet Earth and its ecosystem. This includes, but is not limited to, the promotion of environmental sustainability, the conservation of natural resources, and the protection of biodiversity. 
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Anti-Fascist: The software may not be used by any person or entity that is fascist or fascist-adjacent, which is not only morally despicable but also inherently harmful to the ecology of the Earth. Such prohibited users & entities include individuals and organizations aligned with ethno-nationalist ideologies, theocracies (like the LDS church), authoritarian surveillance regimes, or systemic oppression of marginalized groups.
+
+3. Environmentally Friendly: The use of the Software must take into account the environmental footprint of the the Software. Users ("User(s)" refers to any user(s) of the licensed Software and everyone using the license to license their Software) of the Software are required to minimize the environmental impact of their use of the Software by employing energy-efficient hardware, using renewable energy sources, and/or participating in carbon offset programs to achieve as low of a carbon footprint as reasonably possible as well as the impact of the inclusion of both the licensed software and the project the software is implemented should have a net positive effect (ecologically and otherwise) upon the Earth. Licensor reserves the right, upon reasonable notice, to request documentation demonstrating compliance with environmental obligations, including energy usage, sourcing, and offsets. Users shall utilize energy from facilities certified under recognized renewable energy or carbon-neutral standards, or purchase carbon instruments verified by a recognized third party. Failure to comply may result in license termination after a 30-day remedial period. Licensor may also require purchase or retirement of equivalent carbon offset credits to remedy the breach.
+
+4. Redistributions of the Software, in any form, must reproduce this license and make it easily accessible to all users (including making the links functional). Anyone you share the Software with must also comply with this license. Please report all violations [here.](https://github.com/L1lith/ESMV/issues/new?assignees=&labels=&projects=&template=ban-request.md&title=Ban+Request+for+%5BName%5D)
+
+5. License Updates: Lili the license author reserves the right to update and modify the terms and conditions of the license at any time. Users are encouraged to regularly check for updates to this license. Continued use of the Software more than 30 days after an updated version is published constitutes acceptance of the new terms. You can view the latest version of the license [here.](https://github.com/L1lith/ESMV/blob/master/LICENSE.md)
+
+6. Prohibition of Use in Relation to Genocide, Hate Speech and/or human rights violations: The Software must not be used by any party (or any party in association with any other party) that commits, is complicit in, or is silent in the face of genocide, hate speech, and/or human rights violations. 
+
+Genocide is defined as any of the following acts committed with intent to destroy or displace, in whole or in part, a national, ethnical, racial, or religious group: (a) Killing members of the group; (b) Causing serious bodily or mental harm to members of the group; (c) Deliberately inflicting on the group conditions of life calculated to bring about its physical destruction in whole or in part; (d) Imposing measures intended to prevent births within the group; (e) Forcibly transferring members of the group to another group or location. 
+
+Hate speech is any form of expression that promotes, incites, or perpetuates hatred, discrimination, or violence against individuals or groups based on their race, ethnicity, gender, sexual orientation, gender identity, religion, or disability. This includes, but is not limited to, racism, transphobia, antisemitism, sexism, discrimination based on sexual orientation, discrimination against people with disabilities, sanism, and people experiencing poverty and shelter insecurity. It also encompasses the promotion of hateful or hate speech-adjacent conspiracy theories that target, demonize, or spread disinformation about protected groups or individuals. 
+
+7. Ban List: This license is granted only to users who are not listed on the ban list. If a user is added to the ban list, the license is immediately considered null and void with respect to that user.The original library author (Lily Black) retains the right to maintain a ban list of individuals or entities who are prohibited from using the Software. The ban list may include, but is not limited to, those who have violated the terms of this license, engaged in hate speech or genocidal activities, or have been otherwise deemed unsuitable to use the Software at the licensor's discretion. The licensor reserves the right to update the ban list at any time. The ban list can be found here: [Ban list](https://github.com/L1lith/ESMV/blob/master/ban-list.md) You can request someone be banned or unbanned using the issue tracker on [the ESMV repository](https://github.com/L1lith/ESMV/issues).
+
+8. Use of the Software must demonstrably comply with all clauses herein and must not involve intent to circumvent or subvert the stated ecological and ethical goals of the license.
+
+Any user in violation of any of these clauses (including being on the ban list) will have their rights to use the Software (and any derivative of the software) immediately terminated, and legal action may be taken. The library author may contact you (primarily from an email address ending in webslc.com) and inquire about your compliance to the license. Failure to adequately respond in a timely manner will 
+increase your risk of having your access revoked.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+This license is a variant of the MIT license. It is not made by, supported by, or otherwise affiliated with the Massachusetts Institute of Technology.
