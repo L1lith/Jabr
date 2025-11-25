@@ -25,6 +25,8 @@ export default defineConfig([
     },
     extends: [js.configs.recommended],
     rules: {
+      'no-prototype-builtins': 'off', // complaining about our proxies :(
+      'no-unused-vars': 'off', // complaining about our proxies :(
       semi: ['error', 'never'],
       quotes: ['error', 'single']
     }

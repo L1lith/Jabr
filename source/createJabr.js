@@ -62,10 +62,10 @@ function createJabr(...args) {
   }
 
   storeProxy = new Proxy(propertyMapper.valueMap, {
-    get: (target, prop) => {
+    get: (_, prop) => {
       if (typeof prop === 'symbol') return Reflect.get(propertyMapper.valueMap, prop)
       if (typeof prop !== 'string')
-        throw new Error("Jabr doesn't support non string properties, got: " + inspect(prop))
+        throw new Error('Jabr doesn\'t support non string properties, got: ' + inspect(prop))
       if (prop in storeMethods) {
         return storeMethods[prop] // Return the method
       }

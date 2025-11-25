@@ -10,6 +10,7 @@ module.exports = {
     allowImportExportEverywhere: true
   },
   rules: {
+    'no-unused-vars': 'off', // complaining about our proxies :(
     semi: ['error', 'never'],
     quotes: ['error', 'single']
   },
