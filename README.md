@@ -77,6 +77,15 @@ const store = new Jabr({b: "Long John Silvers"})
 console.log(store.getSignal('b')) // returns a Signal object that always matches our store's 'b' property.
 ```
 
+You can also use $ followed by the property name as a syntactical shorthand:
+
+```js
+import {Jabr} from 'jabr'
+const store = new Jabr({b: "Long John Silvers"})
+
+console.log(store.$b) // returns a Signal object that always matches our store's 'b' property.
+```
+
 #### Configuring Property Options
 
 You can pass additional options for each store property by passing a map of option objects for each property. There are a number of features you can supply, including data validation using Sandhands formats, normalization, and more
