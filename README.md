@@ -1,10 +1,35 @@
 # Jabr
 
-No-nonsense State Management! No more boilerplate hell :)
+No-nonsense State Management! No more boilerplate hell :) Now supports stores and signals! This library is entirely framework agnostic.
 
-## Basics
+## Signal Basics
+Signals are pretty standard to how they exist in other libraries, except they also provide the addListener and removeListener methods.
 
-Jabr is very simple, first we create a store object.
+```js
+import {Signal} from 'jabr'
+const [get, set, addListener, removeListener] = new Signal(52/* Initial value*/)
+
+console.log(get()) // logs 52
+set(7)
+console.log(get()) // logs 7
+
+const ourListener = (newValue, oldValue) => {
+	console.log('New Value: ' + newValue)
+	console.log('Old Value: ' + oldValue)
+}
+
+addListener(ourListener)
+
+set(8) // Now our listener is called, logging our old and new values
+
+removeListener(ourListener)
+
+set(9) // Nothing happens because we removed our listener
+```
+
+## Store Basics
+
+Jabr stores are very simple, first we create a store object.
 
 ```js
 import {Jabr} from 'jabr'
@@ -18,7 +43,7 @@ store.a = 12
 console.log(store) // Logs 12
 ```
 
-#### Event Listeners
+#### Store Event Listeners
 
 Now the magic here is that we can attach listeners to our store. Whenever we modify the store our callback function is called with the new data. Let's look at an example:
 
@@ -40,6 +65,16 @@ import {Jabr} from 'jabr'
 const store = new Jabr({b: "Long John Silvers"})
 
 console.log(store.b) // Logs "Long John Silvers"
+```
+
+### Getting Signals from our Store
+Our store can automatically generate signals for us for any given property using the `.getSignal` method
+
+```js
+import {Jabr} from 'jabr'
+const store = new Jabr({b: "Long John Silvers"})
+
+console.log(store.getSignal('b')) // returns a Signal object that always matches our store's 'b' property.
 ```
 
 #### Configuring Property Options
