@@ -45,7 +45,7 @@ console.log(store) // Logs 12
 
 #### Store Event Listeners
 
-Now the magic here is that we can attach listeners to our store. Whenever we modify the store our callback function is called with the new data. Let's look at an example:
+Now the magic* here is that we can attach listeners to our store. Whenever we modify the store our callback function is called with the new data. Let's look at an example:
 
 ```js
 store.on('a', value => {
@@ -125,3 +125,6 @@ const store = new Jabr()
 syncToJSON(store, 'data.json') // Loads any existing data in data.json (if it exists), overwriting any conflicting properties in the store
 store.snack = "cookie" // Synchronously saves this data to the data.json file when we modify the store
 ```
+
+# A note about the magic*
+As a rule I tend to dislike "magic" in programming. I think this is what makes Ruby on Rails so confusing. All of the functionality in this library is based on [Proxies](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy), and I have designed it in a way to be as simple as possible to use and to read my code. I am still sticking to the functional programming paradigm to ensure that my projects avoid bugs & overcomplication. I'd recommend reading more about functional programming, or [checking out this projects small and concise source code](https://github.com/L1lith/Jabr) (warning: it won't make sense until you learn about proxies, but they are a relatively simple extension of functional programming).
