@@ -74,6 +74,9 @@ function createJabr(...args) {
       }
       if (prop.startsWith('$')) {
         // Return a Signal
+        if (prop === '$') throw new Error('Must specify the prop name for signal shorthand')
+        const propName = prop.substring(1)
+        return storeMethods.getSignal(propName)
       }
       // TODO: THIS LINE IS BROKEN HELP LOL //if (options.strictFormat && !(prop in format)) throw new Error('Cannot access that property!')
       return propertyMapper.getHandler(prop).getValue()

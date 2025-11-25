@@ -57,4 +57,8 @@ describe('Store Signal Functionality', () => {
     setValue(42)
     expect(getValue()).to.equal(42)
   })
+  it('supports the $ signal access shorthand', () => {
+    const store = new Jabr({})
+    expect(store.$b).to.be.an('object')
+  })
 })
