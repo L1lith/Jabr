@@ -48,6 +48,7 @@ export default function createSignal(initialValue = undefined) {
   propertyList = Object.keys(methods).concat(Object.keys(enumerables))
   return new Proxy(signalBase, {
     get: (target, prop) => {
+      if (prop === '__isJabrSignal') return true
       if (methods.hasOwnProperty(prop)) return methods[prop]
       if (enumerables.hasOwnProperty(prop)) return enumerables[prop]
       if (prop === Symbol.iterator) {
