@@ -1,4 +1,4 @@
-# Jabr
+# Store
 
 No-nonsense State Management! No more boilerplate hell :) Now supports stores and signals! This library is entirely framework agnostic.
 
@@ -29,11 +29,11 @@ set(9) // Nothing happens because we removed our listener
 
 ## Store Basics
 
-Jabr stores are very simple, first we create a store object.
+Store stores are very simple, first we create a store object.
 
 ```js
-import {Jabr} from 'jabr'
-const store = new Jabr()
+import {Store} from 'jabr'
+const store = new Store()
 ```
 
 This store object is used just like any other object in Javascript. We can read and modify properties without any special methods.
@@ -54,15 +54,15 @@ store.on('a', value => {
 store.a = 12 // Logs 12
 ```
 
-You can listen to all properties by supplying `*` instead of the property name. Jabr triggers the callback function without requiring us to call any methods. It does this by using the [Proxy API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) under the hood, but you don't need to worry about that unless your runtime doesn't support it (all modern Javascript Environments do).
+You can listen to all properties by supplying `*` instead of the property name. Store triggers the callback function without requiring us to call any methods. It does this by using the [Proxy API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) under the hood, but you don't need to worry about that unless your runtime doesn't support it (all modern Javascript Environments do).
 
 ### Initializing the Store
 
 We can intialize our store by supplying it with an object in the constructor.
 
 ```js
-import {Jabr} from 'jabr'
-const store = new Jabr({b: "Long John Silvers"})
+import {Store} from 'jabr'
+const store = new Store({b: "Long John Silvers"})
 
 console.log(store.b) // Logs "Long John Silvers"
 ```
@@ -71,8 +71,8 @@ console.log(store.b) // Logs "Long John Silvers"
 Our store can automatically generate signals for us for any given property using the `.getSignal` method
 
 ```js
-import {Jabr} from 'jabr'
-const store = new Jabr({b: "Long John Silvers"})
+import {Store} from 'jabr'
+const store = new Store({b: "Long John Silvers"})
 
 console.log(store.getSignal('b')) // returns a Signal object that always syncs with our store's 'b' property.
 ```
@@ -80,8 +80,8 @@ console.log(store.getSignal('b')) // returns a Signal object that always syncs w
 You can also use $ followed by the property name as a syntactical shorthand:
 
 ```js
-import {Jabr} from 'jabr'
-const store = new Jabr({b: "Long John Silvers"})
+import {Store} from 'jabr'
+const store = new Store({b: "Long John Silvers"})
 
 console.log(store.$b) // returns a Signal object that always syncs with our store's 'b' property.
 ```
@@ -95,8 +95,8 @@ You can pass additional options for each store property by passing a map of opti
 The format option can be used to ensure your data is properly formatted
 
 ```js
-import {Jabr} from 'jabr'
-const store = new Jabr({age: 37}, {age: {format: Number}}) // Our store will now throw an error if we attempt to make age anything besides a number (it can still be deleted)
+import {Store} from 'jabr'
+const store = new Store({age: 37}, {age: {format: Number}}) // Our store will now throw an error if we attempt to make age anything besides a number (it can still be deleted)
 ```
 
 #### compute
@@ -104,8 +104,8 @@ const store = new Jabr({age: 37}, {age: {format: Number}}) // Our store will now
 Passing a function as the compute option will allow you to create a property whose value is computed on the fly.
 
 ```js
-import {Jabr} from 'jabr'
-const store = new Jabr({}, {random: {compute: ()=>Math.random()}})
+import {Store} from 'jabr'
+const store = new Store({}, {random: {compute: ()=>Math.random()}})
 console.log(store.random) // Returns a new random value every time it is accessed
 ```
 
@@ -120,11 +120,11 @@ When the default option is provided, if our property does not have a value curre
 We can use the syncToJSON method in order to synchronously save our store to a JSON file. It will also read any existing values in the JSON file.
 
 ```js
-import {Jabr, syncToJSON} from 'jabr'
-const store = new Jabr()
+import {Store, syncToJSON} from 'jabr'
+const store = new Store()
 syncToJSON(store, 'data.json') // Loads any existing data in data.json (if it exists), overwriting any conflicting properties in the store
 store.snack = "cookie" // Synchronously saves this data to the data.json file when we modify the store
 ```
 
 # A note about the magic*
-As a rule I tend to dislike "magic" in programming. I think this is what makes Ruby on Rails so confusing. All of the functionality in this library is based on [Proxies](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy), and I have designed it in a way to be as simple as possible to use and to read my code. I am still sticking to the functional programming paradigm to ensure that my projects avoid bugs & overcomplication. I'd recommend reading more about functional programming, or [checking out this projects small and concise source code](https://github.com/L1lith/Jabr) (warning: it won't make sense until you learn about proxies, but they are a relatively simple extension of functional programming).
+As a rule I tend to dislike "magic" in programming. I think this is what makes Ruby on Rails so confusing. All of the functionality in this library is based on [Proxies](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy), and I have designed it in a way to be as simple as possible to use and to read my code. I am still sticking to the functional programming paradigm to ensure that my projects avoid bugs & overcomplication. I'd recommend reading more about functional programming, or [checking out this projects small and concise source code](https://github.com/L1lith/Store) (warning: it won't make sense until you learn about proxies, but they are a relatively simple extension of functional programming).
