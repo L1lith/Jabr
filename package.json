@@ -22,7 +22,12 @@
     "data",
     "management",
     "proxy",
-    "json"
+    "json",
+    "signals",
+    "store",
+    "stores",
+    "reactive",
+    "reactivity"
   ],
   "author": "L1lith",
   "license": "ESMV",
