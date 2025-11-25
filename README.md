@@ -74,7 +74,7 @@ Our store can automatically generate signals for us for any given property using
 import {Jabr} from 'jabr'
 const store = new Jabr({b: "Long John Silvers"})
 
-console.log(store.getSignal('b')) // returns a Signal object that always matches our store's 'b' property.
+console.log(store.getSignal('b')) // returns a Signal object that always syncs with our store's 'b' property.
 ```
 
 You can also use $ followed by the property name as a syntactical shorthand:
@@ -83,7 +83,7 @@ You can also use $ followed by the property name as a syntactical shorthand:
 import {Jabr} from 'jabr'
 const store = new Jabr({b: "Long John Silvers"})
 
-console.log(store.$b) // returns a Signal object that always matches our store's 'b' property.
+console.log(store.$b) // returns a Signal object that always syncs with our store's 'b' property.
 ```
 
 #### Configuring Property Options
