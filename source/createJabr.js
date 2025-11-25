@@ -3,6 +3,7 @@ import Jabr from './classes/JabrClass'
 // import onlyUnique from './functions/onlyUnique'
 import parseJabrOptions from './functions/parseJabrOptions'
 import PropertyMapper from './classes/PropertyMapper'
+import createSignal from './createSignal'
 import { inspect } from 'util'
 
 const reservedProperties = ['on', 'listen', 'addEventListener', 'strict', 'format']
@@ -42,10 +43,21 @@ function createJabr(...args) {
 
   storeMethods.toObject = storeMethods.valueOf = () => propertyMapper.export()
   storeMethods.getSignal = prop => {
-    const set = value => (storeProxy[prop] = value)
-    const get = () => storeProxy[prop]
-    const signal = [get, set]
-    signal.__signal = true
+    // const set = value => (storeProxy[prop] = value)
+    // const get = () => storeProxy[prop]
+    // const signal = [get, set]
+    // signal.__signal = true
+    const signal = createSignal(storeProxy[prop])
+    const [get, set, addListener] = signal
+    let calledByUs = false
+    storeMethods.on(prop, newValue => {
+      calledByUs = true
+      set(newValue)
+    })
+    addListener(newValue => {
+      if (calledByUs) return (calledByUs = false)
+      storeProxy[prop] = newValue
+    })
     return signal
   }
 

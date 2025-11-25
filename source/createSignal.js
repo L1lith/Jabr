@@ -3,7 +3,8 @@ import SignalClass from './classes/SignalClass'
 const unspecified = Symbol('unspecified')
 
 export default function createSignal(initialValue = undefined) {
-  const signalBase = Object.create(SignalClass)
+  const signalBase = {}
+  Object.setPrototypeOf(signalBase, SignalClass.prototype)
   Object.freeze(signalBase)
   let value = initialValue
   const listeners = []
@@ -48,10 +49,7 @@ export default function createSignal(initialValue = undefined) {
   return new Proxy(signalBase, {
     get: (target, prop) => {
       if (methods.hasOwnProperty(prop)) return methods[prop]
-      if (prop === 0) return methods.get
-      if (prop === 1) return methods.set
-      if (prop === 2) return methods.addListener
-      if (prop === 3) return methods.removeListener
+      if (enumerables.hasOwnProperty(prop)) return enumerables[prop]
       if (prop === Symbol.iterator) {
         return function* () {
           for (const key of Object.keys(enumerables)) {

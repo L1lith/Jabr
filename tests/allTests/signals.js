@@ -45,7 +45,7 @@ describe('Standalone Signal Functionality', () => {
 describe('Store Signal Functionality', () => {
   it('should support the getSignal method', () => {
     const store = new Jabr({})
-    expect(store.getSignal('age')).to.be.an('array')
+    expect(store.getSignal('age')).to.be.an('object')
   })
   it('should retrieve preset values', () => {
     const store = new Jabr({ age: 12 })
