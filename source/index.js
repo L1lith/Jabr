@@ -1,3 +1,5 @@
 export { default as Jabr } from './Jabr'
 export { default as createJabr } from './createJabr'
 export { default as syncToJSON } from './syncToJSON'
+export { default as Signal } from './Signal'
+export { default as createSignal } from './createSignal'
