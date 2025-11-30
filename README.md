@@ -1,5 +1,3 @@
-# Store
-
 No-nonsense State Management! No more boilerplate hell :) Now supports stores and signals! This library is entirely framework agnostic.
 
 ## Signal Basics
@@ -26,6 +24,21 @@ removeListener(ourListener)
 
 set(9) // Nothing happens because we removed our listener
 ```
+
+## Signals: Property Access and Object Destructuring Syntax
+We can also just use our signal like a normal variable using the property access. We can also use the object destructuring syntax, which has some benefits over the array destructuring syntax like the ".self" property (which allows us to create a reference to our signal object). Here's a demo of the object destructuring syntax:
+```js
+const {get: getColor, set: setColor, addListener: addColorListener, self: colorSignal} = new Signal('blue')
+
+addColorListener(color => {
+	console.log("Got a new color!:", color)
+})
+
+setColor('green') // Logs "Got a new color!: green"
+getColor() // returns "green"
+```
+
+Now we can pass around our signal to other parts of our code without needing to break up our declaration into multiple lines (by first declaring the signal variable and then destructuring it after). The list of properties are: `.get, .set, .addListener, .removeListener, and .self`. Another benefit of this syntax compared to array destructuring is that it's not based on the order that you declare your variables, and it's future proof as new properties and methods are added to the signal object.
 
 ## Store Basics
 
