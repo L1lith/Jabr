@@ -5,7 +5,6 @@ const unspecified = Symbol('unspecified')
 export default function createSignal(initialValue = undefined) {
   const signalBase = {}
   Object.setPrototypeOf(signalBase, SignalClass.prototype)
-  Object.freeze(signalBase)
   let value = initialValue
   const listeners = []
   let enumerables // Properties that can be accessed via array destructuring syntax

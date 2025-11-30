@@ -40,6 +40,41 @@ describe('Standalone Signal Functionality', () => {
     expect(gotNewValue).to.equal(null)
     expect(gotOldValue).to.equal(null)
   })
+  it('should properly allow you to access itself via the .self property', () => {
+    const ourSignal = new Signal()
+    expect(ourSignal).to.equal(ourSignal.self)
+  })
+  it('should properly support object destructuring syntax, and behave the same as direct property access', () => {
+    let ourSignal, getter, setter, selfValue
+    expect(() => {
+      ourSignal = new Signal()
+      const { get, set, self } = ourSignal
+      getter = get
+      setter = set
+      selfValue = self
+    }).to.not.throw()
+    expect(getter).to.be.a('function').and.to.equal(ourSignal.get)
+    expect(setter).to.be.a('function').and.to.equal(ourSignal.set)
+    expect(selfValue).to.equal(ourSignal)
+  })
+  it('should throw if set() is called without a value', () => {
+    const [, set] = new Signal()
+    expect(() => set()).to.throw()
+  })
+  it('should not add the same listener twice', () => {
+    const [, , addListener] = new Signal()
+    const fn = () => {}
+    expect(addListener(fn)).to.equal(true)
+    expect(addListener(fn)).to.equal(false)
+  })
+  it('should support array destructuring via iterator', () => {
+    const signal = new Signal()
+    const [get, set, addListener, removeListener] = signal
+    expect(get).to.equal(signal.get)
+    expect(set).to.equal(signal.set)
+    expect(addListener).to.equal(signal.addListener)
+    expect(removeListener).to.equal(signal.removeListener)
+  })
 })
 
 describe('Store Signal Functionality', () => {
