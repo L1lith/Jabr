@@ -77,6 +77,94 @@ describe('Standalone Signal Functionality', () => {
   })
 })
 
+describe('Additional Signal Methods', () => {
+  // -------------------
+  // reset()
+  // -------------------
+  it('resetValue() should restore the signal to its initial value', () => {
+    const signal = new Signal(42)
+    const { get, set, resetValue } = signal
+    set(100)
+    expect(get()).to.equal(100)
+    resetValue()
+    expect(get()).to.equal(42)
+  })
+
+  it('resetValue() should work multiple times consistently', () => {
+    const signal = new Signal('foo')
+    const { get, set, resetValue } = signal
+    set('bar')
+    expect(get()).to.equal('bar')
+    resetValue()
+    expect(get()).to.equal('foo')
+    set('baz')
+    resetValue()
+    expect(get()).to.equal('foo')
+  })
+
+  // -------------------
+  // once()
+  // -------------------
+  it('once() should trigger the listener only once', () => {
+    const signal = new Signal(0)
+    const { set, once } = signal
+    let callCount = 0
+    once(() => callCount++)
+    set(1)
+    set(2)
+    set(3)
+    expect(callCount).to.equal(1)
+  })
+
+  it('once() should allow cancelling before it fires', () => {
+    const signal = new Signal(0)
+    const { set, once } = signal
+    let called = false
+    const cancel = once(() => {
+      called = true
+    })
+    cancel()
+    set(10)
+    expect(called).to.equal(false)
+  })
+
+  // -------------------
+  // removeAllListeners()
+  // -------------------
+  it('removeAllListeners() should remove all registered listeners', () => {
+    const signal = new Signal(0)
+    const { set, addListener, removeAllListeners } = signal
+    let called1 = false
+    let called2 = false
+    const fn1 = () => {
+      called1 = true
+    }
+    const fn2 = () => {
+      called2 = true
+    }
+
+    addListener(fn1)
+    addListener(fn2)
+    removeAllListeners()
+    set(5)
+
+    expect(called1).to.equal(false)
+    expect(called2).to.equal(false)
+  })
+
+  it('removeAllListeners() should not affect new listeners added afterwards', () => {
+    const signal = new Signal(0)
+    const { set, addListener, removeAllListeners } = signal
+    let called = false
+    removeAllListeners()
+    addListener(() => {
+      called = true
+    })
+    set(10)
+    expect(called).to.equal(true)
+  })
+})
+
 describe('Store Signal Functionality', () => {
   it('should support the getSignal method', () => {
     const store = new Jabr({})

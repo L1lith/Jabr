@@ -48,17 +48,17 @@ export default function createSignal(initialValue = undefined) {
     },
     once: fn => {
       const tempListener = (...args) => {
-        storeMethods.removeListener(tempListener)
+        methods.removeListener(tempListener)
         fn(...args)
       }
-      storeMethods.addListener(tempListener)
+      methods.addListener(tempListener)
       return () => {
         // Remove the temporary listener before it is fired
-        storeMethods.removeListener(tempListener)
+        methods.removeListener(tempListener)
       }
     },
-    reset: () => {
-      set(initialValue)
+    resetValue: () => {
+      methods.set(initialValue)
     }
   }
   enumerables = [methods.get, methods.set, methods.addListener, methods.removeListener]
