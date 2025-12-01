@@ -6,10 +6,10 @@ export default function createSignal(initialValue = undefined) {
   const signalBase = {}
   Object.setPrototypeOf(signalBase, SignalClass.prototype)
   let value = initialValue
-  const listeners = []
+  let listeners = []
   let enumerables // Properties that can be accessed via array destructuring syntax
   let signalOutput // Allow us to reference the output proxy
-  const staticProperties = {}
+  const staticProperties = { initial: initialValue }
   const methods = {
     set: (newValue = unspecified) => {
       if (newValue === unspecified) throw new Error('Must specify a value')
@@ -42,6 +42,23 @@ export default function createSignal(initialValue = undefined) {
         return true
       }
       return false
+    },
+    removeAllListeners: () => {
+      listeners = []
+    },
+    once: fn => {
+      const tempListener = (...args) => {
+        storeMethods.removeListener(tempListener)
+        try {
+          fn(...args)
+        } catch (error) {
+          console.error(error)
+        }
+      }
+      storeMethods.addListener(tempListener)
+    },
+    reset: () => {
+      set(initialValue)
     }
   }
   enumerables = [methods.get, methods.set, methods.addListener, methods.removeListener]
