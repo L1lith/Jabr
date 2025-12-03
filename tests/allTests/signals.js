@@ -1,8 +1,8 @@
 const makeID = require('../functions/makeID')
 const { Jabr, Signal } = require('../../dist/')
 const chai = require('chai')
-const { Format } = require('sandhands')
 const { assert, expect } = chai
+const { Format } = require('sandhands')
 
 describe('Standalone Signal Functionality', () => {
   it('should allow you to read the value from the value you initialized it with', () => {
@@ -74,6 +74,98 @@ describe('Standalone Signal Functionality', () => {
     expect(set).to.equal(signal.set)
     expect(addListener).to.equal(signal.addListener)
     expect(removeListener).to.equal(signal.removeListener)
+  })
+})
+
+describe('Signal with Sandhands Format', () => {
+  it('should initialize with a valid value', () => {
+    const sig = Signal(5, Number)
+    expect(sig.get()).to.equal(5)
+  })
+
+  it('should throw on invalid initial value', () => {
+    expect(() => Signal('hello', Number)).to.throw(/Invalid Initial Value/)
+  })
+
+  it('should set valid values', () => {
+    const sig = Signal(0, Number)
+    sig.set(10)
+    expect(sig.get()).to.equal(10)
+  })
+
+  it('should throw when setting an invalid value', () => {
+    const sig = Signal(0, Number)
+    expect(() => sig.set('not a number')).to.throw(/Invalid Assignment Value/)
+  })
+
+  it('should add and remove listeners', () => {
+    const sig = Signal(0, Number)
+    let called = false
+    const listener = () => (called = true)
+    sig.addListener(listener)
+    sig.set(1)
+    expect(called).to.be.true
+    called = false
+    sig.removeListener(listener)
+    sig.set(2)
+    expect(called).to.be.false
+  })
+
+  it('should remove all listeners', () => {
+    const sig = Signal(0, Number)
+    let called1 = false
+    let called2 = false
+    sig.addListener(() => (called1 = true))
+    sig.addListener(() => (called2 = true))
+    sig.removeAllListeners()
+    sig.set(5)
+    expect(called1).to.be.false
+    expect(called2).to.be.false
+  })
+
+  it('should support once listeners', () => {
+    const sig = Signal(0, Number)
+    let count = 0
+    sig.once(() => count++)
+    sig.set(1)
+    sig.set(2)
+    expect(count).to.equal(1)
+  })
+
+  it('should allow cancellation of once listener before firing', () => {
+    const sig = Signal(0, Number)
+    let count = 0
+    const cancel = sig.once(() => count++)
+    cancel()
+    sig.set(1)
+    expect(count).to.equal(0)
+  })
+
+  it('should reset to the initial value', () => {
+    const sig = Signal(10, Number)
+    sig.set(99)
+    expect(sig.get()).to.equal(99)
+    sig.resetValue()
+    expect(sig.get()).to.equal(10)
+  })
+
+  it('should expose initial value and self properties', () => {
+    const sig = Signal(42, Number)
+    expect(sig.initial).to.equal(42)
+    expect(sig.self).to.equal(sig)
+  })
+
+  it('should allow object destructuring access', () => {
+    const sig = Signal(5, Number)
+    const { get, set, removeAllListeners, once, resetValue, self, initial } = sig
+    expect(get()).to.equal(sig.get())
+    set(10)
+    expect(get()).to.equal(10)
+    expect(self).to.equal(sig)
+    expect(initial).to.equal(5)
+    expect(removeAllListeners).to.be.a('function')
+    expect(once).to.be.a('function')
+    expect(resetValue).to.be.a('function')
   })
 })
 

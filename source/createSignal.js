@@ -1,8 +1,11 @@
 import SignalClass from './classes/SignalClass'
+import { valid } from 'sandhands'
 
 const unspecified = Symbol('unspecified')
 
-export default function createSignal(initialValue = undefined) {
+export default function createSignal(initialValue = undefined, format = unspecified) {
+  if (format !== unspecified && !valid(initialValue, format))
+    throw new Error('Invalid Initial Value, Violates Sandhands Format')
   const signalBase = {}
   Object.setPrototypeOf(signalBase, SignalClass.prototype)
   let value = initialValue
@@ -13,6 +16,8 @@ export default function createSignal(initialValue = undefined) {
   const methods = {
     set: (newValue = unspecified) => {
       if (newValue === unspecified) throw new Error('Must specify a value')
+      if (format !== unspecified && !valid(newValue, format))
+        throw new Error('Invalid Assignment Value, Violates Sandhands Format')
       const oldValue = value
       value = newValue
       listeners.forEach(listener => {
