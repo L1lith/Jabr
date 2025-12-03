@@ -35,7 +35,9 @@ export default function convertFunctionToConstructor(fn, optionalClass = null) {
         value: optionalClass.name,
         configurable: true
       })
-    } catch (_) {}
+    } catch (_) {
+      /* continue regardless of error */
+    }
   }
 
   return proxy
