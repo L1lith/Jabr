@@ -40,7 +40,20 @@ function createJabr(...args) {
           propertyMapper.getHandler(prop).emitter.on(event, callback)
         }
       }
-
+  storeMethods.off = storeMethods.removeListener = (prop, callback, event = 'change') => {
+    if (typeof prop != 'string') throw new Error('Prop name must be a string!')
+    if (typeof callback != 'function') throw new Error('Callback must be a function')
+    if (typeof event != 'string' || !validEvents.includes(event))
+      throw new Error(
+        'Invalid event name, valid events: ' +
+          validEvents.map(event => '"' + event + '"').join(', ')
+      )
+    if (prop === '*') {
+      propertyMapper.removeWildcardHandler(callback)
+    } else {
+      propertyMapper.getHandler(prop).emitter.off(event, callback)
+    }
+  }
   storeMethods.toObject = storeMethods.valueOf = () => propertyMapper.export()
   storeMethods.getSignal = prop => {
     // const set = value => (storeProxy[prop] = value)
@@ -65,7 +78,7 @@ function createJabr(...args) {
     get: (_, prop) => {
       if (typeof prop === 'symbol') return Reflect.get(propertyMapper.valueMap, prop)
       if (typeof prop !== 'string')
-        throw new Error('Jabr doesn\'t support non string properties, got: ' + inspect(prop))
+        throw new Error("Jabr doesn't support non string properties, got: " + inspect(prop))
       if (prop === '__isJabrStore') return true
       if (prop in storeMethods) {
         return storeMethods[prop] // Return the method

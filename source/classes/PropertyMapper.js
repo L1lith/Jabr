@@ -18,7 +18,21 @@ class PropertyMapper {
       Object.values(this.handlers).forEach(handler => {
         handler.onChange(callback)
       })
+      return true
     }
+    return false
+  }
+  removeWildcardHandler(callback) {
+    if (!this.wildCards.includes(callback)) return false
+    this.wildCards = this.wildCards.filter(cbCheck => cbCheck !== callback)
+    Object.values(this.handlers).forEach(handler => {
+      try {
+        handler.offChange(callback)
+      } catch (err) {
+        // Ignore errors for non-editable properties
+      }
+    })
+    return true
   }
   getHandler(prop) {
     if (this.isStrict && !this.hasProperty(prop))
