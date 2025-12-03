@@ -1,4 +1,5 @@
 import SignalClass from './classes/SignalClass'
 import createSignal from './createSignal'
+import convertFunctionToConstructor from './functions/convertFunctionToConstructor'
 
-export default new Proxy(SignalClass, { construct: (target, args) => createSignal(...args) })
+export default convertFunctionToConstructor(createSignal, SignalClass)
