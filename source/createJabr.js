@@ -26,6 +26,7 @@ function createJabr(...args) {
   storeMethods.addEventListener =
     storeMethods.on =
     storeMethods.listen =
+    storeMethods.addListener =
       (prop, callback, event = 'change') => {
         if (typeof prop != 'string') throw new Error('Prop name must be a string!')
         if (typeof callback != 'function') throw new Error('Callback must be a function')
