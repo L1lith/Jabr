@@ -12,9 +12,20 @@ const propertyConfigFormat = {
     validate: { _: Function, _or: [Function] },
     cacheLife: { _: Number, min: 0 },
     frozen: Boolean
-  },
-  optionalProps: ['compute', 'format', 'default', 'normalize', 'value', 'validate', 'cacheLife']
+  }
+  // optionalProps: [
+  //   'compute',
+  //   'format',
+  //   'default',
+  //   'normalize',
+  //   'value',
+  //   'validate',
+  //   'cacheLife',
+  //   'frozen'
+  // ]
 }
+
+propertyConfigFormat.optionalProps = Object.keys(propertyConfigFormat) // Make all property config options optional in the sandhands format
 
 // The PropertyHandler handles the interactions for a single property
 class PropertyHandler {
