@@ -25,7 +25,7 @@ const propertyConfigFormat = {
   // ]
 }
 
-propertyConfigFormat.optionalProps = Object.keys(propertyConfigFormat) // Make all property config options optional in the sandhands format
+propertyConfigFormat.optionalProps = Object.keys(propertyConfigFormat._) // Make all property config options optional in the sandhands format
 
 // The PropertyHandler handles the interactions for a single property
 class PropertyHandler {
@@ -121,8 +121,8 @@ class PropertyHandler {
   }
   ensureEditable() {
     if (this.calculated)
-      throw new Error("Cannot edit this property, it's a dynamically calculated value")
-    if (this.frozen) throw new Error("Cannot edit this property, it's frozen")
+      throw new Error('Cannot edit this property, it\'s a dynamically calculated value')
+    if (this.frozen) throw new Error('Cannot edit this property, it\'s frozen')
   }
   onChange(handler) {
     try {
