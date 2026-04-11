@@ -79,7 +79,7 @@ function createJabr(...args) {
     get: (_, prop) => {
       if (typeof prop === 'symbol') return Reflect.get(propertyMapper.valueMap, prop)
       if (typeof prop !== 'string')
-        throw new Error('Jabr doesn\'t support non string properties, got: ' + inspect(prop))
+        throw new Error("Jabr doesn't support non string properties, got: " + inspect(prop))
       if (prop === '__isJabrStore') return true
       if (prop in storeMethods) {
         return storeMethods[prop] // Return the method
@@ -94,7 +94,7 @@ function createJabr(...args) {
         return storeMethods.getSignal(propName)
       }
       // TODO: THIS LINE IS BROKEN HELP LOL //if (options.strictFormat && !(prop in format)) throw new Error('Cannot access that property!')
-      return propertyMapper.getHandler(prop).getValue()
+      return propertyMapper.getHandler(prop).getValue(storeProxy)
     },
     set: (target, prop, value) => {
       if (typeof prop !== 'string') throw new Error('Can only assign string props')
