@@ -1,7 +1,7 @@
 {
   "name": "jabr",
   "version": "0.4.2",
-  "description": "No-nonsense State Management",
+  "description": "Framework agnostic Stores & Signals",
   "main": "index.js",
   "scripts": {
     "build": "rm -rf dist && mkdir dist && cross-env NODE_ENV=production babel source -d dist",
