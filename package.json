@@ -2,7 +2,10 @@
   "name": "jabr",
   "version": "0.4.3",
   "description": "Framework agnostic Stores & Signals",
-  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./solid-getter": "./createSolidGetter.js"
+  },
   "scripts": {
     "build": "rm -rf dist && mkdir dist && cross-env NODE_ENV=production babel source -d dist",
     "dev": "rm -rf dist && mkdir dist && babel source -d dist --watch",
@@ -55,5 +58,8 @@
     "auto-bind": "^1.2.1",
     "sandhands": "^1.8.9",
     "tiny-emitter": "^2.1.0"
+  },
+  "optionalDependencies": {
+    "solid-js": "^1.9.12"
   }
 }
