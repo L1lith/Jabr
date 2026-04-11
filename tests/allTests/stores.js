@@ -1,11 +1,11 @@
 const makeID = require('../functions/makeID')
-const { Jabr } = require('../../dist/')
+const { Jabr } = require('../../dist')
 const chai = require('chai')
 const { assert, expect } = chai
 
 const defaultTimeout = 1000 * 30 // 30 seconds
 
-describe('Normal Object Behavior', () => {
+describe('Normal Store Behavior', () => {
   it('is empty by default', () => {
     const emptyStore = new Jabr()
     assert.deepEqual(emptyStore, {})
@@ -22,6 +22,13 @@ describe('Normal Object Behavior', () => {
     const store = new Jabr(data)
     //throw new Error(require('util').inspect([Object.keys(store), Object.keys(data)]))
     assert.deepEqual(Object.keys(store), Object.keys(data))
+  })
+  it('Can correctly access the proxied store via the compute method', () => {
+    const data = { juliet: false }
+    const store = new Jabr(data, { pilfer: (...args) => args })
+    const computeArgs = store.pilfer
+    expect(computeArgs).to.be.an('array')
+    expect(computeArgs[0]).to.equal(store)
   })
   it('correctly returns the keys for values initialized in the property options', () => {
     const properties = { boat: { value: true } }
