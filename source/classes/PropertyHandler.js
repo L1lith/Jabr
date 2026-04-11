@@ -10,7 +10,8 @@ const propertyConfigFormat = {
     value: ANY,
     normalize: Function,
     validate: { _: Function, _or: [Function] },
-    cacheLife: { _: Number, min: 0 }
+    cacheLife: { _: Number, min: 0 },
+    frozen: Boolean
   },
   optionalProps: ['compute', 'format', 'default', 'normalize', 'value', 'validate', 'cacheLife']
 }
@@ -110,6 +111,7 @@ class PropertyHandler {
   ensureEditable() {
     if (this.calculated)
       throw new Error("Cannot edit this property, it's a dynamically calculated value")
+    if (this.frozen) throw new Error("Cannot edit this property, it's frozen")
   }
   onChange(handler) {
     try {
