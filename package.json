@@ -4,7 +4,8 @@
   "description": "Framework agnostic Stores & Signals",
   "exports": {
     ".": "./index.js",
-    "./solid-getter": "./createSolidGetter.js"
+    "./solid": "./createSolidGetter.js",
+    "./createSolidGetter": "./createSolidGetter.js"
   },
   "scripts": {
     "build": "rm -rf dist && mkdir dist && cross-env NODE_ENV=production babel source -d dist",
