@@ -23,6 +23,10 @@ describe('Normal Store Behavior', () => {
     //throw new Error(require('util').inspect([Object.keys(store), Object.keys(data)]))
     assert.deepEqual(Object.keys(store), Object.keys(data))
   })
+  it('successfully deletes a given value', () => {
+    const store = new Jabr({ a: 12 })
+    expect(delete store.a).to.equal(true)
+  })
   it('Can correctly access the proxied store via the compute method', () => {
     const data = { juliet: false }
     const store = new Jabr(data, { pilfer: (...args) => args })

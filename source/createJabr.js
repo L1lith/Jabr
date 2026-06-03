@@ -112,6 +112,7 @@ function createJabr(...args) {
       if (storeMethods.hasOwnProperty(prop) || secrets.hasOwnProperty(prop))
         throw new Error('Cannot delete that property!')
       propertyMapper.getHandler(prop).delete()
+      return true
     },
     has: (target, prop) => {
       return propertyMapper.hasProperty(prop)
