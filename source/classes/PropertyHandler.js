@@ -105,24 +105,26 @@ class PropertyHandler {
     this.ensureEditable()
     value = this.normalizeValue(value)
     this.sanitizeValue(value)
+    const oldValue = this.valueMap[this.propName]
     this.valueMap[this.propName] = value
     //this.changeListeners.forEach(listener => listener(value))
-    this.emitter.emit('set', value, ...args)
-    this.emitter.emit('change', value, 'set', ...args)
+    this.emitter.emit('set', value, oldValue, ...args)
+    this.emitter.emit('change', value, oldValue, 'set', ...args)
   }
   delete() {
     this.ensureEditable()
+    const oldValue = this.valueMap[this.propName]
     delete this.valueMap[this.propName]
-    this.emitter.emit('delete')
-    this.emitter.emit('change', this.config.default, 'delete')
+    this.emitter.emit('delete', oldValue)
+    this.emitter.emit('change', this.config.default, 'delete', oldValue)
   }
   exists() {
     return this.propName in this.valueMap
   }
   ensureEditable() {
     if (this.calculated)
-      throw new Error('Cannot edit this property, it\'s a dynamically calculated value')
-    if (this.frozen) throw new Error('Cannot edit this property, it\'s frozen')
+      throw new Error("Cannot edit this property, it's a dynamically calculated value")
+    if (this.frozen) throw new Error("Cannot edit this property, it's frozen")
   }
   onChange(handler) {
     try {
