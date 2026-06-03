@@ -110,6 +110,18 @@ describe('Signal with Sandhands Format', () => {
     sig.set(2)
     expect(called).to.be.false
   })
+  it('should support the on and off methods', () => {
+    const sig = Signal(0, Number)
+    let called = false
+    const listener = () => (called = true)
+    sig.on(listener)
+    sig.set(1)
+    expect(called).to.be.true
+    called = false
+    sig.off(listener)
+    sig.set(2)
+    expect(called).to.be.false
+  })
 
   it('should remove all listeners', () => {
     const sig = Signal(0, Number)
