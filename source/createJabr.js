@@ -79,7 +79,7 @@ function createJabr(...args) {
     get: (_, prop) => {
       if (typeof prop === 'symbol') return Reflect.get(propertyMapper.valueMap, prop)
       if (typeof prop !== 'string')
-        throw new Error('Jabr doesn\'t support non string properties, got: ' + inspect(prop))
+        throw new Error("Jabr doesn't support non string properties, got: " + inspect(prop))
       if (prop === '__isJabrStore') return true
       if (prop in storeMethods) {
         return storeMethods[prop] // Return the method
@@ -98,7 +98,7 @@ function createJabr(...args) {
     },
     set: (target, prop, value) => {
       if (typeof prop !== 'string') throw new Error('Can only assign string props')
-      if (prop in storeMethods || prop in reservedProperties)
+      if (prop in storeMethods || reservedProperties.includes(prop))
         throw new Error('Cannot assign that property!')
       const propertyHandler = propertyMapper.getHandler(prop)
       if (propertyMapper.hasProperty(prop) && propertyHandler.getValue() === value) {
