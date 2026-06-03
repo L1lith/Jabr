@@ -123,8 +123,8 @@ class PropertyHandler {
   }
   ensureEditable() {
     if (this.calculated)
-      throw new Error("Cannot edit this property, it's a dynamically calculated value")
-    if (this.frozen) throw new Error("Cannot edit this property, it's frozen")
+      throw new Error('Cannot edit this property, it\'s a dynamically calculated value')
+    if (this.frozen) throw new Error('Cannot edit this property, it\'s frozen')
   }
   onChange(handler) {
     try {
