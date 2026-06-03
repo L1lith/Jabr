@@ -66,6 +66,8 @@ export default function createSignal(initialValue = undefined, format = unspecif
       methods.set(initialValue)
     }
   }
+  methods.on = methods.addListener
+  methods.off = methods.removeListener
   enumerables = [methods.get, methods.set, methods.addListener, methods.removeListener]
   const propertyList = Object.keys(methods)
     .concat(Object.keys(enumerables))
