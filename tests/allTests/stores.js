@@ -86,4 +86,10 @@ describe('Normal Store Behavior', () => {
       jabr[symbol] = 12
     }).to.throw()
   })
+  it('Supports object assignment', () => {
+    const store = new Jabr()
+    const data = { b: 123, c: 'that' }
+    Object.assign(store, data)
+    assert.deepEqual(store, data)
+  })
 })
